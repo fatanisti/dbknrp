@@ -26,15 +26,15 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('favicon.jpg') }}">
 </head>
-<body>
+<body background="https://era-m.us/media/2016/05/quds.jpg">
     <div class="row">
         <div class="col-12">
-            <center><img src="{{ asset('icon/logo.jpg') }}" style="max-width: 100%; height: auto;" ></center>
+            <center><img src="{{ asset('icon/logo.png') }}" style="max-width: 100%; height: auto;" ></center>
         </div>
     </div>
     <div class="row text-center">
         <div class="col-md-12">
-            <h1>Database Regional Jawa Barat</h1>
+            <h1 style="color: white;">Database Regional Jawa Barat</h1>
         </div>
     </div>
     <div class="row text-center">

@@ -32,10 +32,10 @@
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
                 <a class="navbar-brand brand-logo" href="{{ url('/') }}">
-                    <img src="{{ asset('icon/logo.jpg') }}" alt="logo" style="max-width: 50%; height: auto;" />
+                    <img src="{{ asset('icon/logo.png') }}" alt="logo" style="max-width: 50%; height: auto;" />
                 </a>
                 <a class="navbar-brand brand-logo-mini" href="{{ url('/') }}">
-                    <img src="{{ asset('icon/logo.jpg') }}" alt="logo"/>
+                    <img src="{{ asset('icon/logo.png') }}" alt="logo"/>
                 </a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center">
