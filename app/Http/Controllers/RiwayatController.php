@@ -90,7 +90,9 @@ class RiwayatController extends Controller
         $riwayat->riwa_tanggal = $request->inputTgl;
         $riwayat->riwa_jml = $request->inputDona;
         $riwayat->riwa_jenis = $request->inputJenis;
-        $riwayat->riwa_bank = $request->inputBank;
+        if ($request->inputJenis == "Transfer"){
+            $riwayat->riwa_bank = $request->inputBank;
+        }
         $riwayat->fund_id = $user->id;
         $riwayat->user_id = $id;
         $riwayat->save();

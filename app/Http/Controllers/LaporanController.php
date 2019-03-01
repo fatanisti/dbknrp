@@ -171,7 +171,9 @@ class LaporanController extends Controller
         $laporan->lap_asal = $request->inputKab;
         $laporan->lap_jml = $request->inputDona;
         $laporan->lap_jenis = $request->inputJenis;
-        $laporan->lap_bank = $request->inputBank;
+        if ($request->inputJenis == "Transfer"){
+            $laporan->lap_bank = $request->inputBank;
+        }
         $laporan->save();
 
         return redirect()->action(

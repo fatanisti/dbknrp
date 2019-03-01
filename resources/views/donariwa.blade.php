@@ -29,18 +29,17 @@
                         <div class="form-group col-md-12 col-12">
                             <label for="inputJenis">Jenis Donasi</label>
                             <select id="inputJenis" class="form-control" name="inputJenis">
-                                <option value="Cash">Cash</option>
                                 <option value="Transfer">Transfer</option>
+                                <option value="Cash">Cash</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12 col-12">
                             <label for="inputBank">Bank</label>
-                            <select id="inputBank" class="form-control" name="inputBank">
-                                <option value="BSM">BSM</option>
-                                <option value="BNI">BNI</option>
+                            <select id="inputBank" class="form-control" name="inputBank">                                
                                 <option value="CIMB Syariah">CIMB Syariah</option>
+                                <option value="Bank Syariah Mandiri">Bank Syariah Mandiri</option>
                             </select>
                         </div>
                     </div>

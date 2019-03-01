@@ -38,7 +38,7 @@ Route::get('/hapus_riwayat/{id}', 'RiwayatController@destroy')->name('del_riwa/{
 
 Route::get('/tambah_donasi', 'LaporanController@create')->name('create_lap')->middleware('check-permission:adminMaker|adminDaerah');
 Route::post('/simpan_donasi', 'LaporanController@store')->name('store_lap')->middleware('check-permission:adminMaker|adminDaerah');
-Route::get('/hapus_donasi/{id}', 'LaporanController@destroy')->name('del_lap/{id}')->middleware('check-permission:adminDaerah|adminFR');
+Route::get('/hapus_donasi/{id}', 'LaporanController@destroy')->name('del_lap/{id}')->middleware('check-permission:adminMaker|adminDaerah|adminFR');
 
 Route::get('/ganti_password', 'AdminController@changePass')->name('change_pass');
 Route::post('/update_password', 'AdminController@storePass')->name('store_pass');
