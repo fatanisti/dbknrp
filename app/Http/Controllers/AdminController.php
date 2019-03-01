@@ -39,16 +39,29 @@ class AdminController extends Controller
             'password' => $generatepass,
         ];
 
-        $user = User::create([
-            'username' => $generateuser,
-            'password' => Hash::make($generatepass),
-            'nama' => $request->inputNama,
-            'domisili' => $request->inputDomi,
-            'no_hp' => $request->inputHP,
-            'email' => $request->inputEmail,
-            'role' => $request->inputRole,
-            'remember_token' => str_random(10),
-            ]);
+        if ($request->inputRole == 2){
+            $user = User::create([
+                'username' => $generateuser,
+                'password' => Hash::make($generatepass),
+                'nama' => $request->inputNama,
+                'no_hp' => $request->inputHP,
+                'email' => $request->inputEmail,
+                'role' => $request->inputRole,
+                'remember_token' => str_random(10),
+                ]);
+        }
+        else {
+            $user = User::create([
+                'username' => $generateuser,
+                'password' => Hash::make($generatepass),
+                'nama' => $request->inputNama,
+                'domisili' => $request->inputDomi,
+                'no_hp' => $request->inputHP,
+                'email' => $request->inputEmail,
+                'role' => $request->inputRole,
+                'remember_token' => str_random(10),
+                ]);
+        }
         
         return redirect()->action(
             'AdminController@giveacc', $akun
@@ -60,7 +73,7 @@ class AdminController extends Controller
     }
 
     function random_username($string) {
-        $firstpart = substr(str_replace(" ", "", $string),0,5);
+        $firstpart = substr(str_replace(" ", "", $string),0,12);
         $lower = strtolower($firstpart);
         $nrRand = rand(100, 1000);
         
@@ -105,18 +118,19 @@ class AdminController extends Controller
         $user = Auth::user();
 
         if ($user->role == 1){
-            $mamas = User::where('id', 2)
+            $mamas = User::where('role', 2)
                 ->orderBy('nama')
                 ->paginate(10);
         }
         elseif ($user->role == 2){
-            $mamas = User::where('id', 3)
-                ->orWhere('id', 4)
+            $mamas = User::where('role', 3)
+                ->orWhere('role', 4)
                 ->orderBy('nama')
                 ->paginate(10);
         }
         else {
-            $mamas = User::where('id', 4)
+            $mamas = User::where('role', 4)
+                ->where('domisili', $user->domisili)
                 ->orderBy('nama')
                 ->paginate(10);
         }

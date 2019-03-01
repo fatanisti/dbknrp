@@ -13,7 +13,7 @@
         <li class="list-group-item">Password : <b>{{ $request->password }}</b></li>
     </ul>
     <div class="card-body">
-        <a href="{{ route('home') }}" class="card-link">Kembali</a>
+        <a href="{{ route('home') }}" class="btn btn-success card-link">Kembali</a>
     </div>
 </div>
 @endsection
