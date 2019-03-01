@@ -23,28 +23,6 @@ class RiwayatController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $request->get('q');
-
-        $keywordNama = $request->keywordNama;
-        $keywordDaerah = $request->keywordDaerah;
-
-        $entry = [
-            'keywordNama' =>$keywordNama,
-            'keywordDaerah' =>$keywordDaerah,
-        ];
-
-        $donatur = Donatur::orderBy('dona_nama')
-            ->when($request->keywordNama != null, function ($query) use ($request) {
-                $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
-            ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                $query->where('dona_kota_kab', $request->keywordDaerah);})
-            ->paginate(10);
-
-        return view('maintable', compact('donatur', 'query', 'entry'));
-    }
-
-    public function indexFundraiser(Request $request)
-    {
         $user = Auth::user();
         $query = $request->get('q');
 
@@ -56,13 +34,30 @@ class RiwayatController extends Controller
             'keywordDaerah' =>$keywordDaerah,
         ];
 
-        $donatur = Donatur::where('fund_id', $user->id)
-            ->orderBy('dona_nama')
-            ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                $query->where('dona_kota_kab', $request->keywordDaerah);})
-            ->when($request->keywordNama != null, function ($query) use ($request) {
-                $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
-            ->paginate(10);
+        if ($user->role == 4){
+            $donatur = Donatur::where('fund_id', $user->id)
+                ->orderBy('dona_nama')
+                ->when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('dona_kota_kab', $request->keywordDaerah);})
+                ->when($request->keywordNama != null, function ($query) use ($request) {
+                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
+                ->paginate(10);       
+        }
+        elseif ($user->role == 3){
+            $donatur = Donatur::where('dona_kota_kab', $user->domisili)
+                ->orderBy('dona_nama')
+                ->when($request->keywordNama != null, function ($query) use ($request) {
+                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
+                ->paginate(10);
+        }
+        else{
+            $donatur = Donatur::orderBy('dona_nama')
+                ->when($request->keywordNama != null, function ($query) use ($request) {
+                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
+                ->when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('dona_kota_kab', $request->keywordDaerah);})
+                ->paginate(10);
+        }
 
         return view('maintable', compact('donatur', 'query', 'entry'));
     }
@@ -139,7 +134,7 @@ class RiwayatController extends Controller
         $donatur = Donatur::where('dona_id', $id)->first();
         $riwayat = DB::table('riwayat_donasi')
             ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
-            ->join('users', 'users.id', '=', 'donatur.fund_id')
+            ->join('users', 'users.id', '=', 'riwayat_donasi.fund_id')
             ->where('user_id', $id)
             ->orderBy('riwa_tanggal')
             ->when($request->keywordBulan != null, function ($query) use ($request) {

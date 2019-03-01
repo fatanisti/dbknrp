@@ -22,33 +22,30 @@ class DonaturController extends Controller
      */
     public function index(Request $request)
     {
-        $entry = [
-            'keywordDaerah' => $request->keywordDaerah,
-        ];
-
-        $donatur = Donatur::orderBy('dona_nama')
-            ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                $query->where('dona_kota_kab', $request->keywordDaerah);})
-            ->paginate(10);
-
-        $donatur->appends($request->only('keywordDaerah', 'limit'));
-
-        return view('maintable', compact('donatur', 'entry'));
-    }
-
-    public function indexFundraiser(Request $request)
-    {
         $user = Auth::user();
-        
+
         $entry = [
             'keywordDaerah' => $request->keywordDaerah,
         ];
 
-        $donatur = Donatur::where('fund_id', $user->id)
-            ->orderBy('dona_nama')
-            ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                $query->where('dona_kota_kab', $request->keywordDaerah);})
-            ->paginate(10);
+        if ($user->role == 4){
+            $donatur = Donatur::where('fund_id', $user->id)
+                ->orderBy('dona_nama')
+                ->when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('dona_kota_kab', $request->keywordDaerah);})
+                ->paginate(10);
+        }
+        elseif ($user->role == 3){
+            $donatur = Donatur::where('dona_kota_kab', $user->domisili)
+                ->orderBy('dona_nama')
+                ->paginate(10);
+        }
+        else {
+            $donatur = Donatur::orderBy('dona_nama')
+                ->when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('dona_kota_kab', $request->keywordDaerah);})
+                ->paginate(10);
+        }
 
         $donatur->appends($request->only('keywordDaerah', 'limit'));
 

@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach ($admin as $adm)
+            @foreach ($mamas as $adm)
                 <tr>
                     <td>{{ $adm->nama }}</td>
                     <td>{{ $adm->domisili }}</td>
@@ -35,7 +35,7 @@
         </table>
     </div>
     <div class="row">
-        {{ $admin->onEachSide(1)->links() }}
+        {{ $mamas->onEachSide(1)->links() }}
     </div>
 </div>
 @endsection

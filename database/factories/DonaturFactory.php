@@ -23,7 +23,7 @@ $factory->define(App\Donatur::class, function (Faker $faker) {
         'dona_akun_instagram' => $faker->userName,
         'dona_profesi' => $faker->company,
         'dona_catatan' => $faker->word,
-        'fund_id' => $faker->numberBetween($min = 1, $max = 5),
+        'fund_id' => $faker->numberBetween($min = 1, $max = 7),
     ];
 });
 

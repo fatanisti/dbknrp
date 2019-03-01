@@ -102,6 +102,7 @@
                                     @endif
                                 </div>
                             </div>
+                            <h6><i class="fa fa-map-marker"></i> {{ Auth::user()->domisili }}</h6>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -118,51 +119,24 @@
                         </a>
                     </li>
                     @endif
-                    @if ( Auth::user()->role != 4 )
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dona_data') }}">
                             <i class="menu-icon fa fa-address-book-o"></i>
                             <span class="menu-title">Data Donatur</span>
                         </a>
                     </li>
-                    @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dona_data_fr') }}">
-                            <i class="menu-icon fa fa-address-book-o"></i>
-                            <span class="menu-title">Data Donatur</span>
-                        </a>
-                    </li>
-                    @endif
-                    @if ( Auth::user()->role != 4 )
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dona_riwa') }}">
                             <i class="menu-icon mdi mdi-backup-restore"></i>
                             <span class="menu-title">Riwayat</span>
                         </a>
                     </li>
-                    @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dona_riwa_fr') }}">
-                            <i class="menu-icon mdi mdi-backup-restore"></i>
-                            <span class="menu-title">Riwayat</span>
-                        </a>
-                    </li>
-                    @endif
-                    @if ( Auth::user()->role != 4 )
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dona_laporan') }}">
                             <i class="menu-icon mdi mdi-chart-line"></i>
                             <span class="menu-title">Laporan</span>
                         </a>
                     </li>
-                    @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dona_laporan_fr') }}">
-                            <i class="menu-icon mdi mdi-chart-line"></i>
-                            <span class="menu-title">Laporan</span>
-                        </a>
-                    </li>
-                    @endif
                 </ul>
             </nav>
             <!-- partial -->

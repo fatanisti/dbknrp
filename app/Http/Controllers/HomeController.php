@@ -43,13 +43,13 @@ class HomeController extends Controller
             $n_format = number_format($n);
         } else if ($n < 1000000) {
             // Anything less than a million
-            $n_format = number_format($n / 1000) . 'K';
+            $n_format = number_format($n / 1000) . ' Ribu';
         } else if ($n < 1000000000) {
             // Anything less than a billion
-            $n_format = number_format($n / 1000000) . 'M';
+            $n_format = number_format($n / 1000000) . ' Juta';
         } else {
             // At least a billion
-            $n_format = number_format($n / 1000000000) . 'B';
+            $n_format = number_format($n / 1000000000) . ' Milyar';
         }
         return $n_format;
     }

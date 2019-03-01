@@ -24,6 +24,7 @@ class LaporanController extends Controller
     {
         // dd(date('m'));
         // dd($request->all());
+        $user = Auth::user();
         $query = $request->get('q');
 
         $keywordDaerah = $request->keywordDaerah;
@@ -36,81 +37,88 @@ class LaporanController extends Controller
             'keywordTahun' =>$keywordTahun,
         ];
 
-        $result = Laporan::when($request->keywordDaerah != null, function ($query) use ($request) {
-                $query->where('lap_domisili', $request->keywordDaerah)
-            ;})
-            ->when($request->keywordBulan != null, function ($query) use ($request) {
-                $query->whereMonth('lap_tanggal', $request->keywordBulan)
-            ;})
-            ->when($request->keywordTahun != null, function ($query) use ($request) {
-                $query->whereYear('lap_tanggal', $request->keywordTahun)
-            ;})
-            ->get();
+        if ($user->role == 4){
+            $result = DB::table('riwayat_donasi')
+                ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
+                ->join('users', 'users.id', '=', 'riwayat_donasi.fund_id')
+                ->where('riwayat_donasi.fund_id', $user->id)
+                ->when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('domisili', $user->domisili)
+                ;})
+                ->when($request->keywordBulan != null, function ($query) use ($request) {
+                    $query->whereMonth('riwa_tanggal', $request->keywordBulan)
+                ;})
+                ->when($request->keywordTahun != null, function ($query) use ($request) {
+                    $query->whereYear('riwa_tanggal', $request->keywordTahun)
+                ;})
+                ->get();
 
-        $result2 = Laporan::when($request->keywordDaerah != null, function ($query) use ($request) {
-                $query->where('lap_domisili', $request->keywordDaerah)
-            ;})
-            ->when($request->keywordBulan != null, function ($query) use ($request) {
-                $query->whereMonth('lap_tanggal', $request->keywordBulan)
-            ;})
-            ->when($request->keywordTahun != null, function ($query) use ($request) {
-                $query->whereYear('lap_tanggal', $request->keywordTahun)
-            ;})
-            ->orderBy('lap_tanggal')
-            ->simplePaginate(10);
+            $result2 = DB::table('riwayat_donasi')
+                ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
+                ->join('users', 'users.id', '=', 'riwayat_donasi.fund_id')
+                ->where('riwayat_donasi.fund_id', $user->id)
+                ->when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('domisili', $user->domisili)
+                ;})
+                ->when($request->keywordBulan != null, function ($query) use ($request) {
+                    $query->whereMonth('riwa_tanggal', $request->keywordBulan)
+                ;})
+                ->when($request->keywordTahun != null, function ($query) use ($request) {
+                    $query->whereYear('riwa_tanggal', $request->keywordTahun)
+                ;})
+                ->orderBy('riwa_tanggal')
+                ->simplePaginate(10);       
+        }
+        elseif ($user->role == 3){
+            $result = Laporan::where('lap_asal', $user->domisili)
+                ->when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('lap_domisili', $request->keywordDaerah)
+                ;})
+                ->when($request->keywordBulan != null, function ($query) use ($request) {
+                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                ;})
+                ->when($request->keywordTahun != null, function ($query) use ($request) {
+                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                ;})
+                ->get();
 
-        //  dd($result2->toArray());
-        return view('laporan', compact('result', 'result2', 'query', 'entry'));
-        // return response()->json($result);
-    }
+            $result2 = Laporan::where('lap_asal', $user->domisili)
+                ->when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('lap_domisili', $request->keywordDaerah)
+                ;})
+                ->when($request->keywordBulan != null, function ($query) use ($request) {
+                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                ;})
+                ->when($request->keywordTahun != null, function ($query) use ($request) {
+                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                ;})
+                ->orderBy('lap_tanggal')
+                ->simplePaginate(10);
+        }
+        else {
+            $result = Laporan::when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('lap_domisili', $request->keywordDaerah)
+                ;})
+                ->when($request->keywordBulan != null, function ($query) use ($request) {
+                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                ;})
+                ->when($request->keywordTahun != null, function ($query) use ($request) {
+                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                ;})
+                ->get();
 
-    public function indexFundraiser(Request $request)
-    {
-        // dd(date('m'));
-        // dd($request->all());
-        $user = Auth::user();
-        $query = $request->get('q');
-
-        $keywordDaerah = $user->domisili;
-        $keywordBulan = $request->keywordBulan;
-        $keywordTahun = $request->keywordTahun;
-
-        $entry = [
-            'keywordDaerah' =>$keywordDaerah,
-            'keywordBulan' =>$keywordBulan,
-            'keywordTahun' =>$keywordTahun,
-        ];
-
-        $result = DB::table('riwayat_donasi')
-            ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
-            ->join('users', 'users.id', '=', 'riwayat_donasi.fund_id')
-            ->where('riwayat_donasi.fund_id', $user->id)
-            ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                $query->where('domisili', $user->domisili)
-            ;})
-            ->when($request->keywordBulan != null, function ($query) use ($request) {
-                $query->whereMonth('riwa_tanggal', $request->keywordBulan)
-            ;})
-            ->when($request->keywordTahun != null, function ($query) use ($request) {
-                $query->whereYear('riwa_tanggal', $request->keywordTahun)
-            ;})
-            ->get();
-
-        $result2 = DB::table('riwayat_donasi')
-            ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
-            ->join('users', 'users.id', '=', 'riwayat_donasi.fund_id')
-            ->where('riwayat_donasi.fund_id', $user->id)
-            ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                $query->where('domisili', $user->domisili)
-            ;})
-            ->when($request->keywordBulan != null, function ($query) use ($request) {
-                $query->whereMonth('riwa_tanggal', $request->keywordBulan)
-            ;})
-            ->when($request->keywordTahun != null, function ($query) use ($request) {
-                $query->whereYear('riwa_tanggal', $request->keywordTahun)
-            ;})
-            ->orderBy('riwa_tanggal')
-            ->simplePaginate(10);
+            $result2 = Laporan::when($request->keywordDaerah != null, function ($query) use ($request) {
+                    $query->where('lap_domisili', $request->keywordDaerah)
+                ;})
+                ->when($request->keywordBulan != null, function ($query) use ($request) {
+                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                ;})
+                ->when($request->keywordTahun != null, function ($query) use ($request) {
+                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                ;})
+                ->orderBy('lap_tanggal')
+                ->simplePaginate(10);
+        }
 
         //  dd($result2->toArray());
         return view('laporan', compact('result', 'result2', 'query', 'entry'));

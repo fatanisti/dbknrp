@@ -105,23 +105,23 @@ class AdminController extends Controller
         $user = Auth::user();
 
         if ($user->role == 1){
-            $admin = User::where('id', 2)
+            $mamas = User::where('id', 2)
                 ->orderBy('nama')
                 ->paginate(10);
         }
         elseif ($user->role == 2){
-            $admin = User::where('id', 3)
+            $mamas = User::where('id', 3)
                 ->orWhere('id', 4)
                 ->orderBy('nama')
                 ->paginate(10);
         }
         else {
-            $admin = User::where('id', 4)
+            $mamas = User::where('id', 4)
                 ->orderBy('nama')
                 ->paginate(10);
         }
 
-        return view ('manacc', compact('admin'));
+        return view ('manacc', compact('mamas'));
     }
 
     public function infoAcc($id){

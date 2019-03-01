@@ -10,6 +10,9 @@
 <form action="{{ url()->current() }}" style="padding: 0px 0px 10px 0px;">
     <div class="form-group" method="GET">
         <label for="daerah"><i class="fa fa-map-marker"></i> Daerah</label>
+        @if (Auth::user()->role == 3)
+        <input type="text" class="form-control" id="daerah" placeholder="{{ Auth::user()->domisili }}" disabled>
+        @else
         <select class="form-control" id="daerah" name="keywordDaerah">
             <option value="">--- Semua ---</option>
             <option value="Kab. Bandung" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Bandung' ? 'selected' : ''  }}>Kab. Bandung</option>
@@ -39,6 +42,7 @@
             <option value="Kota Sukabumi" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kota Sukabumi' ? 'selected' : ''  }}>Kota Sukabumi</option>
             <option value="Kota Tasikmalaya" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kota Tasikmalaya' ? 'selected' : ''  }}>Kota Tasikmalaya</option>
         </select>
+        @endif
     </div>
 @if (Route::current()->getName() == 'dona_riwa' || Route::current()->getName() == 'dona_riwa_fr')
     <div class="form-group">

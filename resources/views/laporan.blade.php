@@ -8,7 +8,9 @@
         <div class="form-row">
             <div class="form-group col-md-4 col-12">
                 <label for="daerah">Daerah</label>
-                @if( Auth::user()->role != 4 )
+                @if( Auth::user()->role == 3 )
+                <input type="text" class="form-control" id="daerah" placeholder="{{ Auth::user()->domisili }}" disabled>
+                @else
                 <select class="form-control" id="daerah" name="keywordDaerah">
                     <option value="">--- Semua ---</option>
                     <option value="Kab. Bandung" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Bandung' ? 'selected' : ''  }}>Kab. Bandung</option>
@@ -38,8 +40,6 @@
                     <option value="Kota Sukabumi" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kota Sukabumi' ? 'selected' : ''  }}>Kota Sukabumi</option>
                     <option value="Kota Tasikmalaya" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kota Tasikmalaya' ? 'selected' : ''  }}>Kota Tasikmalaya</option>
                 </select>
-                @else
-                <input type="text" class="form-control" id="daerah" placeholder="{{ Auth::user()->domisili }}" disabled>
                 @endif
             </div>
             <div class="form-group col-md-4 col-6">
@@ -85,7 +85,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Route::current()->getName() == 'dona_laporan_fr')
+                    @if (Auth::user()->role == 4)
                     <tr>
                         <td>{{ $result->count() }}</td>
                         <td>{{ $result->groupBy('fund_id')->count('fund_id') }}</td>
@@ -118,7 +118,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Route::current()->getName() == 'dona_laporan_fr')
+                    @if (Auth::user()->role == 4)
                     @foreach ($result2 as $res2)
                     <tr>
                         <td>{{ $res2->nama }}</td>
@@ -127,6 +127,7 @@
                         <td>{{ $res2->dona_kota_kab }}</td>
                         <td>{{ $res2->riwa_tanggal }}</td>
                         <td>@money( $res2->riwa_jml )</td>
+                        <td><a href="/hapus_donasi/{{ $res2->riwa_id }}" class="btn btn-danger"><i class="fa fa-window-close-o"></i>Hapus</a></td>
                     </tr>
                     @endforeach
                     @else

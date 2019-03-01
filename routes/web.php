@@ -21,11 +21,11 @@ Route::get('/', function () {
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/list_donatur', 'DonaturController@index')->name('dona_data')->middleware('check-permission:adminUtama|adminMaker|adminDaerah');
+Route::get('/list_donatur', 'DonaturController@index')->name('dona_data');
 Route::get('/data_donatur/{id}', 'DonaturController@show')->name('donatur/{id}');
-Route::get('/list_donasi', 'RiwayatController@index')->name('dona_riwa')->middleware('check-permission:adminUtama|adminMaker|adminDaerah');
+Route::get('/list_donasi', 'RiwayatController@index')->name('dona_riwa');
 Route::get('/riwayat_donasi/{id}', 'RiwayatController@show')->name('riwayat/{id}');
-Route::get('/laporan', 'LaporanController@index')->name('dona_laporan')->middleware('check-permission:adminUtama|adminMaker|adminDaerah');
+Route::get('/laporan', 'LaporanController@index')->name('dona_laporan');
 
 Route::get('/tambah_donatur', 'DonaturController@create')->name('create_dona')->middleware('check-permission:adminDaerah|adminFR');
 Route::post('/simpan_donatur', 'DonaturController@store')->name('store_dona')->middleware('check-permission:adminDaerah|adminFR');
@@ -39,10 +39,6 @@ Route::get('/hapus_riwayat/{id}', 'RiwayatController@destroy')->name('del_riwa/{
 Route::get('/tambah_donasi', 'LaporanController@create')->name('create_lap')->middleware('check-permission:adminMaker|adminDaerah');
 Route::post('/simpan_donasi', 'LaporanController@store')->name('store_lap')->middleware('check-permission:adminMaker|adminDaerah');
 Route::get('/hapus_donasi/{id}', 'LaporanController@destroy')->name('del_lap/{id}')->middleware('check-permission:adminDaerah|adminFR');
-
-Route::get('/list_donatur_fr', 'DonaturController@indexFundraiser')->name('dona_data_fr')->middleware('check-permission:adminFR');
-Route::get('/list_donasi_fr', 'RiwayatController@indexFundraiser')->name('dona_riwa_fr')->middleware('check-permission:adminFR');
-Route::get('/laporan_fr', 'LaporanController@indexFundraiser')->name('dona_laporan_fr')->middleware('check-permission:adminFR');
 
 Route::get('/ganti_password', 'AdminController@changePass')->name('change_pass');
 Route::post('/update_password', 'AdminController@storePass')->name('store_pass');
