@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Donatur;
 use App\Laporan;
 use App\Riwayat;
+use App\Exports\DonaturExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class DonaturController extends Controller
 {
@@ -20,12 +23,16 @@ class DonaturController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function all(Request $request)
     {
         $user = Auth::user();
 
+        $keywordNama = $request->keywordNama;
+        $keywordDaerah = $request->keywordDaerah;
+
         $entry = [
-            'keywordDaerah' => $request->keywordDaerah,
+            'keywordNama' =>$keywordNama,
+            'keywordDaerah' =>$keywordDaerah,
         ];
 
         if ($user->role == 4){
@@ -33,15 +40,22 @@ class DonaturController extends Controller
                 ->orderBy('dona_nama')
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
                     $query->where('dona_kota_kab', $request->keywordDaerah);})
+                ->when($request->keywordNama != null, function ($query) use ($request) {
+                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
                 ->paginate(10);
         }
         elseif ($user->role == 3){
-            $donatur = Donatur::where('dona_kota_kab', $user->domisili)
-                ->orderBy('dona_nama')
+            $donatur = Donatur::where( function($q) use ($user) {
+                $q->where('dona_kota_kab', $user->domisili);
+            })  ->orderBy('dona_nama')
+                ->when($request->keywordNama != null, function ($query) use ($request) {
+                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
                 ->paginate(10);
         }
         else {
             $donatur = Donatur::orderBy('dona_nama')
+                ->when($request->keywordNama != null, function ($query) use ($request) {
+                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
                     $query->where('dona_kota_kab', $request->keywordDaerah);})
                 ->paginate(10);
@@ -49,7 +63,7 @@ class DonaturController extends Controller
 
         $donatur->appends($request->only('keywordDaerah', 'limit'));
 
-        return view('maintable', compact('donatur', 'entry'));
+        return view('show.maintable', compact('donatur', 'query', 'entry'));
     }
 
     /**
@@ -59,10 +73,7 @@ class DonaturController extends Controller
      */
     public function create(Request $request)
     {
-        $idDon = $this->generateDonaId();
-
         $entry = [
-            'idDon' => $idDon,
             'inputTglReg' => $request->inputTglReg,
             'inputNama' => $request->inputNama,
             'inputBP' => $request->inputBP,
@@ -82,13 +93,10 @@ class DonaturController extends Controller
             'inputProf' => $request->inputProf,
             'inputFB' => $request->inputFB,
             'inputIG' => $request->inputIG,
-            'inputDona' => $request->inputDona,
-            'inputJenis' => $request->inputJenis,
-            'inputBank' => $request->inputBank,
             'inputCatatan' => $request->inputCatatan,
         ];
 
-        return view('createdonatur', compact('entry'));
+        return view('post.buatdonatur', compact('entry'));
     }
 
     function generateDonaId() {
@@ -119,11 +127,12 @@ class DonaturController extends Controller
     {
         // dd($request);
         
+        $idDon = $this->generateDonaId();
         $nocek = uniqid();
         $user = Auth::user();
         $donatur = new Donatur;
         
-        $donatur->dona_id = $request->idDon;
+        $donatur->dona_id = $idDon;
         $donatur->dona_tgl_regis = $request->inputTglReg;
         $donatur->dona_nama = $request->inputNama;
         $donatur->dona_tempat_lahir = $request->inputBP;
@@ -148,35 +157,10 @@ class DonaturController extends Controller
         // dd($donatur);
         $donatur->save();
 
-        $id = Donatur::where('dona_id', $request->idDon)->first();
-
-        $riwayat = new Riwayat;
-    
-        $riwayat->riwa_id = $nocek;
-        $riwayat->riwa_tanggal = $request->inputTglReg;
-        $riwayat->riwa_jml = $request->inputDona;
-        $riwayat->riwa_jenis = $request->inputJenis;
-        $riwayat->riwa_bank = $request->inputBank;
-        $riwayat->fund_id = $user->id;
-        $riwayat->user_id = $id->dona_id;
-        $riwayat->save();
-
-        $laporan = new Laporan;
-
-        $laporan->lap_id = $nocek;
-        $laporan->lap_tanggal = $request->inputTglReg;
-        $laporan->lap_penerima = $user->nama;
-        $laporan->lap_domisili = $user->domisili;
-        $laporan->lap_pemberi = $request->inputNama;
-        $laporan->lap_asal = $request->inputKab;
-        $laporan->lap_jml = $request->inputDona;
-        $laporan->lap_jenis = $request->inputJenis;
-        $laporan->lap_bank = $request->inputBank;
-
-        $laporan->save();
+        $id = Donatur::where('dona_id', $idDon)->first();
 
         return redirect()->action(
-            'DonaturController@show', $id->dona_id
+            'DonaturController@index', $id->dona_id
         );
     }
 
@@ -186,11 +170,11 @@ class DonaturController extends Controller
      * @param  \App\Donatur  $donatur
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function index($id)
     {
         $donatur = Donatur::where('dona_id', $id)->first();
 
-        return view ('donadata', ['donatur'=>$donatur]);
+        return view ('show.donadata', ['donatur'=>$donatur]);
     }
 
     /**
@@ -207,7 +191,7 @@ class DonaturController extends Controller
             'donatur' => $donatur,
         ];
 
-        return view ('createdonatur', $result);
+        return view ('post.ubahdonatur', $result);
     }
 
     /**
@@ -244,7 +228,7 @@ class DonaturController extends Controller
         $donatur->save();
 
         return redirect()->action(
-            'DonaturController@show', $donatur->dona_id
+            'DonaturController@index', $donatur->dona_id
         );
     }
 
@@ -259,7 +243,20 @@ class DonaturController extends Controller
         Donatur::where('dona_id', $id)->delete();
 
         return redirect()->action(
-            'HomeController@index'
-        );
+            'DonaturController@index'
+        )->with('success', 'Data berhasil dihapus');
+    }
+
+     /**
+     * @return BinaryFileResponse
+     */
+    public function export()
+    {
+        $user = Auth::user();
+
+        $id = $user->id;
+        $daerah = $user->domisili;
+
+        return new DonaturExport($id, $daerah);
     }
 }

@@ -15,13 +15,14 @@ class CreateLaporan extends Migration
     {
         Schema::create('laporan', function (Blueprint $table) {
             $table->string('lap_id')->unique();
-            $table->date('lap_tanggal')->nullable();
-            $table->string('lap_penerima')->nullable();
-            $table->string('lap_domisili')->nullable();
-            $table->string('lap_pemberi')->nullable();
-            $table->string('lap_asal')->nullable();
-            $table->unsignedBigInteger('lap_jml')->nullable();
-            $table->string('lap_jenis')->nullable();
+            $table->date('lap_tanggal');
+            $table->string('lap_kegiatan');
+            $table->string('lap_penerima');
+            $table->string('lap_domisili');
+            $table->string('lap_pemberi');
+            $table->string('lap_asal');
+            $table->unsignedBigInteger('lap_jml');
+            $table->string('lap_jenis');
             $table->string('lap_bank')->nullable();
         });
     }

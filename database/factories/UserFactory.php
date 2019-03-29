@@ -18,7 +18,7 @@ $factory->define(App\User::class, function (Faker $faker) {
         'nama' => $faker->name,
         'username' => $faker->userName,
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', //secret
-        'domisili' => $faker->randomElement(['Kab. Bandung', 'Kab. Sumedang', 'Kota Cimahi']),
+        'domisili' => $faker->randomElement(['Kab. Bandung', 'Kab. Bogor', 'Kab. Sumedang', 'Kota Cimahi']),
         'no_hp' => $faker->phoneNumber,
         'email' => $faker->unique()->safeEmail,
         'remember_token' => str_random(10),

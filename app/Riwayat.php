@@ -10,6 +10,10 @@ class Riwayat extends Model
 
     protected $fillable = [
         'riwa_tanggal',
+        'riwa_penerima',
+        'riwa_domisili',
+        'riwa_pemberi',
+        'riwa_asal',
         'riwa_jml',
         'riwa_jenis',
         'riwa_bank',

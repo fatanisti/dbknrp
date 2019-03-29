@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Donatur;
+use App\Guest;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +32,7 @@ class AdminController extends Controller
     protected function create(Request $request)
     {
         // dd($request);
-
+        $creator = Auth::user();
         $generateuser = $this->random_username($request->inputNama);
         $generatepass = $this->random_string();
         
@@ -39,11 +41,12 @@ class AdminController extends Controller
             'password' => $generatepass,
         ];
 
-        if ($request->inputRole == 2){
+        if ($creator->id == 3){
             $user = User::create([
                 'username' => $generateuser,
                 'password' => Hash::make($generatepass),
                 'nama' => $request->inputNama,
+                'domisili' => $creator->domisili,
                 'no_hp' => $request->inputHP,
                 'email' => $request->inputEmail,
                 'role' => $request->inputRole,
@@ -51,16 +54,29 @@ class AdminController extends Controller
                 ]);
         }
         else {
-            $user = User::create([
-                'username' => $generateuser,
-                'password' => Hash::make($generatepass),
-                'nama' => $request->inputNama,
-                'domisili' => $request->inputDomi,
-                'no_hp' => $request->inputHP,
-                'email' => $request->inputEmail,
-                'role' => $request->inputRole,
-                'remember_token' => str_random(10),
-                ]);
+            if ($request->inputRole == 2){
+                $user = User::create([
+                    'username' => $generateuser,
+                    'password' => Hash::make($generatepass),
+                    'nama' => $request->inputNama,
+                    'no_hp' => $request->inputHP,
+                    'email' => $request->inputEmail,
+                    'role' => $request->inputRole,
+                    'remember_token' => str_random(10),
+                    ]);
+            }
+            else {
+                $user = User::create([
+                    'username' => $generateuser,
+                    'password' => Hash::make($generatepass),
+                    'nama' => $request->inputNama,
+                    'domisili' => $request->inputDomi,
+                    'no_hp' => $request->inputHP,
+                    'email' => $request->inputEmail,
+                    'role' => $request->inputRole,
+                    'remember_token' => str_random(10),
+                    ]);
+            }
         }
         
         return redirect()->action(
@@ -69,7 +85,7 @@ class AdminController extends Controller
     }
 
     public function giveacc(Request $request){
-        return view ('storeadmin', compact('request'));
+        return view ('info.giveadmin', compact('request'));
     }
 
     function random_username($string) {
@@ -114,6 +130,29 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Password telah diganti');
     }
 
+    public function resetPass($id)
+    {
+        $generatepass = $this->random_string();
+        
+        $admin = User::where('id', $id)->first();
+
+        $akun = [
+            'username' => $admin->username,
+            'password' => $generatepass,
+        ];
+
+        $admin->password = Hash::make($generatepass);
+        $admin->save();
+            
+        return redirect()->action(
+            'AdminController@resetacc', $akun
+        );
+    }
+
+    public function resetacc(Request $request){
+        return view ('info.resetadmin', compact('request'));
+    }
+
     public function manageAcc(){
         $user = Auth::user();
 
@@ -123,9 +162,10 @@ class AdminController extends Controller
                 ->paginate(10);
         }
         elseif ($user->role == 2){
-            $mamas = User::where('role', 3)
-                ->orWhere('role', 4)
-                ->orderBy('nama')
+            $mamas = User::where( function($q) {
+                $q->where('role', 3)
+                ->orWhere('role', 4);
+            })  ->orderBy('nama')
                 ->paginate(10);
         }
         else {
@@ -135,22 +175,45 @@ class AdminController extends Controller
                 ->paginate(10);
         }
 
-        return view ('manacc', compact('mamas'));
+        return view ('show.manacc', compact('mamas'));
     }
 
     public function infoAcc($id){
 
         $admin = User::where('id', $id)->first();
 
-        return view ('infoacc', compact('admin'));
+        return view ('show.infoacc', compact('admin'));
     }
 
     public function destroy($id)
     {
+        $data = Donatur::select(
+            'dona_id',
+            'dona_nama',
+            'dona_tempat_lahir',
+            'dona_tgl_lahir',
+            'dona_alamat',
+            'dona_rt',
+            'dona_rw',
+            'dona_kodepos',
+            'dona_kelurahan',
+            'dona_kecamatan',
+            'dona_kota_kab',
+            'dona_provinsi',
+            'dona_negara',
+            'dona_no_telp',
+            'dona_no_hp',
+            'dona_email',
+            'dona_akun_facebook',
+            'dona_akun_instagram',
+            'dona_profesi')->where('fund_id', $id)->get()->toArray();
+        
+        Guest::insert($data);
         User::where('id', $id)->delete();
+        Donatur::where('fund_id', $id)->update(array('fund_id' => null));
 
         return redirect()->action(
             'AdminController@manageAcc'
-        );
+        )->with('success', 'Admin telah dihapus');
     }
 }

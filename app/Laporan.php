@@ -10,6 +10,7 @@ class Laporan extends Model
 
     protected $fillable = [
         'lap_tanggal',
+        'lap_kegiatan',
         'lap_penerima',
         'lap_domisili',
         'lap_pemberi',

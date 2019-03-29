@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDonatur extends Migration
+class CreateDonaturG extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateDonatur extends Migration
      */
     public function up()
     {
-        Schema::create('donatur', function (Blueprint $table) {
+        Schema::create('donatur_g', function (Blueprint $table) {
             $table->bigInteger('dona_id')->unique();
-            $table->date('dona_tgl_regis');
             $table->string('dona_nama');
             $table->string('dona_tempat_lahir')->nullable();
             $table->date('dona_tgl_lahir')->nullable();
@@ -34,8 +33,6 @@ class CreateDonatur extends Migration
             $table->string('dona_akun_facebook')->nullable();
             $table->string('dona_akun_instagram')->nullable();
             $table->string('dona_profesi')->nullable();
-            $table->string('dona_catatan', 255)->nullable();
-            $table->integer('fund_id')->nullable();
 
             $table->timestamps();
         });
@@ -48,6 +45,6 @@ class CreateDonatur extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('donatur');
+        Schema::dropIfExists('donatur_g');
     }
 }

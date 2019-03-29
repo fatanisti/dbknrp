@@ -6,8 +6,11 @@ use DB;
 use App\Donatur;
 use App\Laporan;
 use App\Riwayat;
+use App\Exports\RiwayatExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RiwayatController extends Controller
 {
@@ -17,49 +20,35 @@ class RiwayatController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display the specified resource.
      *
+     * @param  \App\Riwayat  $riwayat
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index($id, Request $request)
     {
-        $user = Auth::user();
         $query = $request->get('q');
-
-        $keywordNama = $request->keywordNama;
-        $keywordDaerah = $request->keywordDaerah;
+        
+        $keywordBulan = $request->keywordBulan;
+        $keywordTahun = $request->keywordTahun;
 
         $entry = [
-            'keywordNama' =>$keywordNama,
-            'keywordDaerah' =>$keywordDaerah,
+            'keywordBulan' => $keywordBulan,
+            'keywordTahun' => $keywordTahun,
         ];
 
-        if ($user->role == 4){
-            $donatur = Donatur::where('fund_id', $user->id)
-                ->orderBy('dona_nama')
-                ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('dona_kota_kab', $request->keywordDaerah);})
-                ->when($request->keywordNama != null, function ($query) use ($request) {
-                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
-                ->paginate(10);       
-        }
-        elseif ($user->role == 3){
-            $donatur = Donatur::where('dona_kota_kab', $user->domisili)
-                ->orderBy('dona_nama')
-                ->when($request->keywordNama != null, function ($query) use ($request) {
-                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
-                ->paginate(10);
-        }
-        else{
-            $donatur = Donatur::orderBy('dona_nama')
-                ->when($request->keywordNama != null, function ($query) use ($request) {
-                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
-                ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('dona_kota_kab', $request->keywordDaerah);})
-                ->paginate(10);
-        }
+        $donatur = Donatur::where('dona_id', $id)->first();
+        $riwayat = DB::table('riwayat_donasi')
+            ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
+            ->where('user_id', $id)
+            ->orderBy('riwa_tanggal', 'desc')
+            ->when($request->keywordBulan != null, function ($query) use ($request) {
+                $query->whereMonth('riwa_tanggal', $request->keywordBulan);})
+            ->when($request->keywordTahun != null, function ($query) use ($request) {
+                $query->whereYear('riwa_tanggal', $request->keywordTahun);})
+            ->paginate(10);
 
-        return view('maintable', compact('donatur', 'query', 'entry'));
+        return view('show.donariwa', compact('entry', 'riwayat', 'donatur'));
     }
 
     /**
@@ -88,12 +77,15 @@ class RiwayatController extends Controller
 
         $riwayat->riwa_id = $nocek;
         $riwayat->riwa_tanggal = $request->inputTgl;
+        $riwayat->riwa_penerima = $user->nama;
+        $riwayat->riwa_domisili = $user->domisili;
+        $riwayat->riwa_pemberi = $dona->dona_nama;
+        $riwayat->riwa_asal = $dona->dona_kota_kab;
         $riwayat->riwa_jml = $request->inputDona;
         $riwayat->riwa_jenis = $request->inputJenis;
         if ($request->inputJenis == "Transfer"){
             $riwayat->riwa_bank = $request->inputBank;
         }
-        $riwayat->fund_id = $user->id;
         $riwayat->user_id = $id;
         $riwayat->save();
 
@@ -101,51 +93,21 @@ class RiwayatController extends Controller
 
         $laporan->lap_id = $nocek;
         $laporan->lap_tanggal = $request->inputTgl;
+        $laporan->lap_kegiatan = "Donasi Reguler";
         $laporan->lap_penerima = $user->nama;
         $laporan->lap_domisili = $user->domisili;
         $laporan->lap_pemberi = $dona->dona_nama;
         $laporan->lap_asal = $dona->dona_kota_kab;
         $laporan->lap_jml = $request->inputDona;
         $laporan->lap_jenis = $request->inputJenis;
-        $laporan->lap_bank = $request->inputBank;
+        if ($request->inputJenis == "Transfer"){
+            $laporan->lap_bank = $request->inputBank;
+        }
         $laporan->save();
 
         return redirect()->action(
-            'RiwayatController@show', $id
+            'RiwayatController@index', $id
         );
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Riwayat  $riwayat
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id, Request $request)
-    {
-        $query = $request->get('q');
-        
-        $keywordBulan = $request->keywordBulan;
-        $keywordTahun = $request->keywordTahun;
-
-        $entry = [
-            'keywordBulan' => $keywordBulan,
-            'keywordTahun' => $keywordTahun,
-        ];
-
-        $donatur = Donatur::where('dona_id', $id)->first();
-        $riwayat = DB::table('riwayat_donasi')
-            ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
-            ->join('users', 'users.id', '=', 'riwayat_donasi.fund_id')
-            ->where('user_id', $id)
-            ->orderBy('riwa_tanggal')
-            ->when($request->keywordBulan != null, function ($query) use ($request) {
-                $query->whereMonth('riwa_tanggal', $request->keywordBulan);})
-            ->when($request->keywordTahun != null, function ($query) use ($request) {
-                $query->whereYear('riwa_tanggal', $request->keywordTahun);})
-            ->paginate(10);
-
-        return view('donariwa', compact('entry', 'riwayat', 'donatur'));
     }
 
     /**
@@ -182,8 +144,18 @@ class RiwayatController extends Controller
         Riwayat::where('riwa_id', $id)->delete();
         Laporan::where('lap_id', $id)->delete();
 
-        return redirect()->action(
-            'HomeController@index'
-        );
+        return redirect()->back()->with('success', 'Data berhasil dihapus');        
+    }
+
+     /**
+     * @return BinaryFileResponse
+     */
+    public function export()
+    {
+        $user = Auth::user();
+
+        $id = $user->id;
+
+        return new RiwayatExport($id);
     }
 }

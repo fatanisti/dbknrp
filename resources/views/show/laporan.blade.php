@@ -3,19 +3,36 @@
 @section('pageTitle', 'Laporan')
 
 @section('content')
-<div class="container">
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+@if (\Session::get('success'))
+<div class="alert alert-success">
+    <p>{{ \Session::get('success') }}</p>
+</div>
+@endif
+<h4 class="text-primary text-center"><i class="fa fa-bar-chart-o"></i> @yield('pageTitle')</h4>
+<div class="card-body text-center">
     <form action="{{ url()->current() }}" style="padding: 0px 0px 10px 0px;">
         <div class="form-row">
             <div class="form-group col-md-4 col-12">
                 <label for="daerah">Daerah</label>
                 @if( Auth::user()->role == 3 )
-                <input type="text" class="form-control" id="daerah" placeholder="{{ Auth::user()->domisili }}" disabled>
+                <p class="form-control">{{ Auth::user()->domisili }}</p>
                 @else
                 <select class="form-control" id="daerah" name="keywordDaerah">
                     <option value="">--- Semua ---</option>
                     <option value="Kab. Bandung" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Bandung' ? 'selected' : ''  }}>Kab. Bandung</option>
                     <option value="Kab. Bandung Barat" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Bandung Barat' ? 'selected' : ''  }}>Kab. Bandung Barat</option>
                     <option value="Kab. Bekasi" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Bekasi' ? 'selected' : ''  }}>Kab. Bekasi</option>
+                    <option value="Kab. Bogor" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Bogor' ? 'selected' : ''  }}>Kab. Bogor</option>
                     <option value="Kab. Ciamis" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Ciamis' ? 'selected' : ''  }}>Kab. Ciamis</option>
                     <option value="Kab. Cianjur" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Cianjur' ? 'selected' : ''  }}>Kab. Cianjur</option>
                     <option value="Kab. Cirebon" {{ old('keywordDaerah', $entry['keywordDaerah'] )== 'Kab. Cirebon' ? 'selected' : ''  }}>Kab. Cirebon</option>
@@ -70,14 +87,19 @@
                 </select>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Generate</button>
+        <div class="form-row justify-content-center">
+            <div class="form-group">
+                <button type="submit" class="btn btn-inverse-primary btn-rounded"><i class="fa fa-folder-open-o"></i> Tampilkan Laporan</button>
+            </div>
+        </div>
     </form>
+    @if(!$result->isEmpty())
     <div class="row">
         <div class="table-responsive">
-            <table class="table table-striped" id="tabel_laporan">
+            <table class="table table-bordered" id="tabel_laporan">
                 <caption>Rangkuman Data Donasi</caption>
                 <thead>
-                    <tr>
+                    <tr class="table-primary">
                         <th>Jumlah Donasi</th>
                         <th>Jumlah Fundraiser Terlibat</th>
                         <th>Jumlah Donatur Terlibat</th>
@@ -85,70 +107,94 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr class="table-light">
                     @if (Auth::user()->role == 4)
-                    <tr>
                         <td>{{ $result->count() }}</td>
                         <td>{{ $result->groupBy('fund_id')->count('fund_id') }}</td>
                         <td>{{ $result->groupBy('user_id')->count('user_id') }}</td>
                         <td>@money( $result->sum('riwa_jml') )</td>
-                    </tr>
                     @else
-                    <tr>
                         <td>{{ $result->count() }}</td>
                         <td>{{ $result->groupBy('lap_penerima')->count('lap_penerima') }}</td>
                         <td>{{ $result->groupBy('lap_pemberi')->count('lap_pemberi') }}</td>
                         <td>@money( $result->sum('lap_jml') )</td>
-                    </tr>
                     @endif
+                    </tr>
                 </tbody>
             </table>
         </div>
+        @endif
+        @if(!$result2->isEmpty())
         <div class="table-responsive">
-            <table class="table table-striped" id="tabel_laporan">
+            <table class="table table-bordered" id="tabel_laporan">
                 <caption>Detail Donasi</caption>
                 <thead>
-                    <tr>
+                    <tr class="table-primary">
+                    @if (Auth::user()->role != 1)
+                        <th>Tanggal Terima</th>
+                        <th>Kegiatan</th>
                         <th>Nama Penerima</th>
                         <th>Asal Daerah</th>
                         <th>Nama Donatur</th>
                         <th>Domisili</th>
-                        <th>Tanggal Terima</th>
                         <th>Jumlah Donasi</th>
                         <th>Action</th>
+                    @else
+                        <th>Periode</th>
+                        <th>Daerah</th>
+                        <th>Jumlah Donasi</th>
+                    @endif
                     </tr>
                 </thead>
                 <tbody>
                     @if (Auth::user()->role == 4)
-                    @foreach ($result2 as $res2)
-                    <tr>
-                        <td>{{ $res2->nama }}</td>
-                        <td>{{ $res2->domisili }}</td>
+                        @foreach ($result2 as $res2)
+                    <tr class="table-light">
+                        <td>{{ Date::parse($res2->riwa_tanggal)->format('j F Y') }}</td>
+                        <td>Donasi Reguler</td>
+                        <td>{{ $res2->riwa_penerima }}</td>
+                        <td>{{ $res2->riwa_domisili }}</td>
                         <td>{{ $res2->dona_nama }}</td>
                         <td>{{ $res2->dona_kota_kab }}</td>
-                        <td>{{ $res2->riwa_tanggal }}</td>
                         <td>@money( $res2->riwa_jml )</td>
-                        <td><a href="/hapus_donasi/{{ $res2->riwa_id }}" class="btn btn-danger"><i class="fa fa-window-close-o"></i>Hapus</a></td>
+                        <td><a href="/hapus_donasi/{{ $res2->riwa_id }}" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
                     </tr>
-                    @endforeach
+                        @endforeach
+                    @elseif (Auth::user()->role == 1)
+                        @foreach ($result2 as $res2)
+                    <tr class="table-light">
+                        <td><p>{{ $res2->year }}/{{ $res2->month }}</p></td>
+                        <td>{{ $res2->area }}</td>
+                        <td>@money( $res2->total )</td>
+                    </tr>
+                        @endforeach
                     @else
-                    @foreach ($result2 as $res2)
-                    <tr>
+                        @foreach ($result2 as $res2)
+                    <tr class="table-light">
+                        <td>{{ Date::parse($res2->lap_tanggal)->format('j F Y') }}</td>
+                        <td>{{ $res2->lap_kegiatan }}</td>
                         <td>{{ $res2->lap_penerima }}</td>
                         <td>{{ $res2->lap_domisili }}</td>
                         <td>{{ $res2->lap_pemberi }}</td>
                         <td>{{ $res2->lap_asal }}</td>
-                        <td>{{ $res2->lap_tanggal }}</td>
                         <td>@money( $res2->lap_jml )</td>
-                        <td><a href="/hapus_donasi/{{ $res2->lap_id }}" class="btn btn-danger"><i class="fa fa-window-close-o"></i>Hapus</a></td>
+                        <td><a href="/hapus_donasi/{{ $res2->lap_id }}" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
                     </tr>
-                    @endforeach
+                        @endforeach
                     @endif
                 </tbody>
             </table>
-        </div>        
+        </div>
     </div>
-    <div class="row">
-        {{ $result2->appends(\Request::except('_token'))->links() }}
+    @else
+    <div class="row justify-content-center"><h4>Tidak ada data tersimpan.</h4></div>
+    @endif        
+    {{ $result2->appends(\Request::except('_token'))->links() }}
+    @if(!$result2->isEmpty())
+    <br>
+    <div class="row justify-content-center">
+        <a href="{{ route('unduh_lap') }}" class="btn btn-inverse-success btn-rounded"><i class="fa fa-cloud-download"></i>Download Excel (Semua)</a>
     </div>
+    @endif
 </div>
 @endsection

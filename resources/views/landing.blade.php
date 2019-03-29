@@ -1,47 +1,25 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+@extends('app')
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+@section('pageTitle', 'Welcome')
 
-    <title>Welcome Page :: {{ config('app.name') }}</title>
-
-    <!-- Scripts V2 -->
-    <script src="{{ asset('vendors/js/vendor.bundle.base.js') }}"></script>
-    <script src="{{ asset('vendors/js/vendor.bundle.addons.js') }}"></script>
-
-    <script src="{{ asset('js/off-canvas.js') }}"></script>
-    <script src="{{ asset('js/misc.js') }}"></script>
-    
-    <!-- Styles V2 -->
-    <link rel="stylesheet" href="{{ asset('vendors/iconfonts/mdi/css/materialdesignicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.addons.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('favicon.jpg') }}">
-</head>
-<body background="https://era-m.us/media/2016/05/quds.jpg">
-    <div class="row">
-        <div class="col-12">
-            <center><img src="{{ asset('icon/logo.png') }}" style="max-width: 100%; height: auto;" ></center>
+@section('content')
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper auth-page">
+        <div class="content-wrapper d-flex align-items-center auth auth-bg-1 theme-one justify-content-center">
+            <div class="row w-100">
+                <div class="col-lg-6 mx-auto">
+                    <div class="bg-light text-center" style="border-radius: 25px;">
+                        <center><img src="{{ asset('icon/logo.png') }}" style="max-width: 100%; height: auto;" ></center>
+                        <h1 class="text-primary"><b>Database Regional Jawa Barat</b></h1>
+                        <br>
+                    </div>
+                    <br>
+                    <a class="btn btn-primary btn-rounded btn-block" href="{{ route('login') }}"><i class="fa fa-sign-in"></i> Masuk</a>
+                    <br>
+                    <a class="btn btn-success btn-rounded btn-block" href="{{ route('buat_dona') }}"><i class="fa fa-smile-o"></i> Jadi Donatur</a>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row text-center">
-        <div class="col-md-12">
-            <h1 style="color: white;">Database Regional Jawa Barat</h1>
-        </div>
-    </div>
-    <div class="row text-center">
-        <div class="col-md-12">
-            <a class="btn btn-primary" href="{{ route('login') }}">Masuk</a>
-        </div>
-    </div>
-</body>
-</html>
-	
+</div>
+@endsection

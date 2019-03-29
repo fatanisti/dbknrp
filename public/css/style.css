@@ -8463,10 +8463,10 @@ pre {
     border-bottom-width: 2px; }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f2f8f9; }
+  background-color: #D1F7F7; }
 
 .table-hover tbody tr:hover {
-  background-color: #f2f8f9; }
+  background-color: #D1F7F7; }
 
 .table-primary,
 .table-primary > th,
@@ -11036,7 +11036,7 @@ button.close {
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
-  background-color: #f2f8f9;
+  background-color: #D1F7F7;
   background-clip: padding-box;
   border: 1px solid #f2f2f2;
   border-radius: 0.3rem;
@@ -13501,7 +13501,8 @@ body {
 .form-control,
 .form-control:focus {
   -webkit-box-shadow: none;
-  -moz-box-shadow: none; }
+  -moz-box-shadow: none;
+  box-shadow: none; }
 
 .form-control {
   box-shadow: none; }
@@ -14217,7 +14218,7 @@ html {
       width: 100%; } }
 
 .content-wrapper {
-  background: #f2f8f9;
+  background: #D1F7F7;
   padding: 1.5rem 1.7rem;
   width: 100%;
   -webkit-flex-grow: 1;
@@ -14243,7 +14244,7 @@ pre {
 
 /* Footer */
 .footer {
-  background: #f2f8f9;
+  background: #D1F7F7;
   padding: 20px 1rem;
   transition: all 0.25s ease;
   -moz-transition: all 0.25s ease;
@@ -16105,11 +16106,11 @@ ul {
 /* === Landing screens === */
 /* Auth */
 .auth.auth-bg-1 {
-  background: url("../images/auth/login_1.jpg");
+  background: url("https://1920x1080hdwallpapers.com/image/201502/city/288/al-aqsa-mosque-jerusalem-israel.jpg");
   background-size: cover; }
 
 .auth.register-bg-1 {
-  background: url("../images/auth/register.jpg") center center no-repeat;
+  background: url("https://1920x1080hdwallpapers.com/image/201502/city/288/al-aqsa-mosque-jerusalem-israel.jpg") center center no-repeat;
   background-size: cover; }
 
 .auth.theme-one .auto-form-wrapper {
@@ -16279,10 +16280,10 @@ ul {
   .auth.theme-two .banner-section .slide-content {
     width: 100%; }
     .auth.theme-two .banner-section .slide-content.bg-1 {
-      background: url("../images/auth/login_2.jpg") no-repeat center center;
+      background: url("https://1920x1080hdwallpapers.com/image/201502/city/288/al-aqsa-mosque-jerusalem-israel.jpg") no-repeat center center;
       background-size: cover; }
     .auth.theme-two .banner-section .slide-content.bg-2 {
-      background: url("../images/auth/register_2.jpg") no-repeat center center;
+      background: url("https://1920x1080hdwallpapers.com/image/201502/city/288/al-aqsa-mosque-jerusalem-israel.jpg") no-repeat center center;
       background-size: cover; }
 
 /* Error */

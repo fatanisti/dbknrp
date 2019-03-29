@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -24,17 +25,50 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $riwa = DB::table('laporan')
-            ->get();
-        $dona = DB::table('donatur')
-            ->get();
-        $fund = DB::table('users')->where('role', 4)
-            ->get();
-        $mon = DB::table('laporan')->sum('lap_jml');
+        $user = Auth::user();
 
-        $monk = $this->custom_number_format($mon);
+        if ($user->role == 3){
+            $riwa = DB::table('laporan')
+                ->where('lap_domisili', $user->domisili)
+                ->get();
+            $dona = DB::table('donatur')
+                ->join('users', 'users.id', '=', 'donatur.fund_id')
+                ->where('domisili', $user->domisili)
+                ->get();
+            $fund = DB::table('users')->where('role', 4)
+                ->where('domisili', $user->domisili)
+                ->get();
+            $mon = DB::table('laporan')->where('lap_domisili', $user->domisili)->sum('lap_jml');
 
-        return view('home', compact('riwa', 'dona', 'fund', 'monk'));
+            $monk = $this->custom_number_format($mon);
+        }
+        elseif ($user->role == 4){
+            $riwa = DB::table('laporan')
+                ->where('lap_penerima', $user->nama)
+                ->get();
+            $dona = DB::table('donatur')
+                ->where('fund_id', $user->id)
+                ->get();
+            $fund = DB::table('users')->where('role', 4)
+                ->where('id', $user->id)
+                ->get();
+            $mon = DB::table('laporan')->where('lap_penerima', $user->nama)->sum('lap_jml');
+
+            $monk = $this->custom_number_format($mon);
+        }
+        else {
+            $riwa = DB::table('laporan')
+                ->get();
+            $dona = DB::table('donatur')
+                ->get();
+            $fund = DB::table('users')->where('role', 4)
+                ->get();
+            $mon = DB::table('laporan')->sum('lap_jml');
+
+            $monk = $this->custom_number_format($mon);
+        }
+
+        return view('show.home', compact('riwa', 'dona', 'fund', 'monk'));
     }
 
     function custom_number_format($n) {
