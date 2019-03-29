@@ -16,23 +16,17 @@ class LaporanExport implements FromQuery, WithHeadings, Responsable, ShouldAutoS
 
     private $fileName = 'laporan-dbknrp.xlsx';
 
-    public function __construct(string $nama, string $daerah)
-    {
-        $this->nama = $nama;
-        $this->daerah = $daerah;
-    }
-
     public function query()
     {
         $user = Auth::user();
 
         if ($user->role == 4){
             return Laporan::query()
-            ->where('lap_penerima', $this->nama);
+            ->where('lap_penerima', $user->nama);
         }
         elseif ($user->role == 3){
             return Laporan::query()
-            ->where('lap_domisili', $this->daerah);
+            ->where('lap_domisili', $user->domisili);
         }
         else {
             return Laporan::query();

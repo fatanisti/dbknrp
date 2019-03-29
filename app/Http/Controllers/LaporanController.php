@@ -277,11 +277,6 @@ class LaporanController extends Controller
      */
     public function export()
     {
-        $user = Auth::user();
-
-        $nama = $user->nama;
-        $daerah = $user->domisili;
-
-        return new LaporanExport($nama, $daerah);
+        return new LaporanExport();
     }
 }

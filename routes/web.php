@@ -30,10 +30,6 @@ Route::group(['middleware' => 'disablepreventback'],function()
     Route::get('/riwayat_donasi/{id}', 'RiwayatController@index')->name('riwayat/{id}');
     Route::get('/laporan', 'LaporanController@index')->name('dona_laporan');
 
-    Route::get('/daftar_donatur/data_donatur/download', 'DonaturController@export')->name('unduh_dona');
-    Route::get('/daftar_donatur/data_donatur/download', 'RiwayatController@export')->name('unduh_riwa');
-    Route::get('/laporan/download', 'LaporanController@export')->name('unduh_lap');
-
     Route::get('/tambah_donatur', 'DonaturController@create')->name('create_dona')->middleware('check-permission:adminFR');
     Route::post('/simpan_donatur', 'DonaturController@store')->name('store_dona')->middleware('check-permission:adminFR');
     Route::get('/ubah_donatur/{id}', 'DonaturController@edit')->name('edit_dona/{id}')->middleware('check-permission:adminDaerah|adminFR');
@@ -66,3 +62,7 @@ Route::group(['middleware' => 'disablepreventback'],function()
 
 Route::get('/calon_donatur', 'GuestController@create')->name('buat_dona');
 Route::post('/save_donatur', 'GuestController@store')->name('spn_dona');
+
+Route::get('/daftar_donatur/data_donatur/download', 'DonaturController@export')->name('unduh_dona');
+Route::get('/daftar_donatur/data_donatur/download', 'RiwayatController@export')->name('unduh_riwa');
+Route::get('/laporan/download', 'LaporanController@export')->name('unduh_lap');
