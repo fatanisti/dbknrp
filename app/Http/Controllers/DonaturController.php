@@ -243,7 +243,7 @@ class DonaturController extends Controller
         Donatur::where('dona_id', $id)->delete();
 
         return redirect()->action(
-            'DonaturController@index'
+            'DonaturController@all'
         )->with('success', 'Data berhasil dihapus');
     }
 

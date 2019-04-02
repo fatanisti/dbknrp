@@ -18,7 +18,7 @@
             </div>
             <div class="form-group col-md-7">
                 <label for="inputNama"><i class="fa fa-user-circle-o"></i> Nama Lengkap</label>
-                <input type="text" class="form-control" id="inputNama" name="inputNama" value="{{ $donatur->dona_nama }}">
+                <input type="text" class="form-control" id="inputNama" name="inputNama" value="{{ $donatur->dona_nama }}" required>
             </div>
         </div>
         <div class="form-row">

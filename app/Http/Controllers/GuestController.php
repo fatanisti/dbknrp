@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Donatur;
+use App\Riwayat;
 use App\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -151,6 +152,14 @@ class GuestController extends Controller
 
     public function ignore($id)
     {
+        if (Donatur::where('dona_id', '=', $id)->exists()){
+            Donatur::where('dona_id', $id)->delete();
+        }
+
+        if (Riwayat::where('user_id', '=', $id)->exists()){
+            Riwayat::where('user_id', $id)->delete();
+        }
+
         Guest::where('dona_id', $id)->delete();
 
         return redirect()->back()->with('success', 'Data berhasil dihapus');
