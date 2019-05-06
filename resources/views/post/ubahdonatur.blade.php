@@ -26,11 +26,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-8">
                         <label for="inputBP"><i class="fa fa-star"></i> Tempat Lahir</label>
-                        <input type="text" class="form-control" id="inputBP" name="inputBP" value="{{ $donatur->dona_tempat_lahir }}" required>
+                        <input type="text" class="form-control" id="inputBP" name="inputBP" value="{{ $donatur->dona_tempat_lahir }}">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="inputBOD"><i class="fa fa-calendar-o"></i> Tanggal Lahir</label>
-                        <input type="date" class="form-control" id="inputBOD" name="inputBOD" value="{{ $donatur->dona_tgl_lahir }}" required>
+                        <input type="date" class="form-control" id="inputBOD" name="inputBOD" value="{{ $donatur->dona_tgl_lahir }}">
                     </div>
                 </div>
                 <div class="form-row">
