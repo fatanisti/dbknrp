@@ -37,15 +37,15 @@ class RiwayatController extends Controller
             'keywordTahun' => $keywordTahun,
         ];
 
-        $donatur = Donatur::where('dona_id', $id)->first();
-        $riwayat = DB::table('riwayat_donasi')
-            ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
-            ->where('user_id', $id)
-            ->orderBy('riwa_tanggal', 'desc')
+        $donatur = Donatur::where('id', $id)->first();
+        $riwayat = DB::table('dona_riwa')
+            ->join('dona_profile', 'dona_profile.id', '=', 'dona_riwa.dona_id')
+            ->where('dona_id', $id)
+            ->orderBy('tanggal', 'desc')
             ->when($request->keywordBulan != null, function ($query) use ($request) {
-                $query->whereMonth('riwa_tanggal', $request->keywordBulan);})
+                $query->whereMonth('tanggal', $request->keywordBulan);})
             ->when($request->keywordTahun != null, function ($query) use ($request) {
-                $query->whereYear('riwa_tanggal', $request->keywordTahun);})
+                $query->whereYear('tanggal', $request->keywordTahun);})
             ->paginate(10);
 
         return view('show.donariwa', compact('entry', 'riwayat', 'donatur'));
@@ -70,38 +70,38 @@ class RiwayatController extends Controller
     public function store(Request $request, $id)
     {
         $user = Auth::user();
-        $dona = Donatur::where('dona_id', $id)->first();
+        $dona = Donatur::where('id', $id)->first();
         $nocek = uniqid();
 
         $riwayat = new Riwayat;
 
-        $riwayat->riwa_id = $nocek;
-        $riwayat->riwa_tanggal = $request->inputTgl;
-        $riwayat->riwa_penerima = $user->nama;
-        $riwayat->riwa_domisili = $user->domisili;
-        $riwayat->riwa_pemberi = $dona->dona_nama;
-        $riwayat->riwa_asal = $dona->dona_kota_kab;
-        $riwayat->riwa_jml = $request->inputDona;
-        $riwayat->riwa_jenis = $request->inputJenis;
+        $riwayat->id = $nocek;
+        $riwayat->tanggal = $request->inputTgl;
+        $riwayat->penerima = $user->nama;
+        $riwayat->domisili = $user->domisili;
+        $riwayat->pemberi = $dona->nama;
+        $riwayat->asal = $dona->kota_kab;
+        $riwayat->jml = $request->inputDona;
+        $riwayat->jenis = $request->inputJenis;
         if ($request->inputJenis == "Transfer"){
-            $riwayat->riwa_bank = $request->inputBank;
+            $riwayat->bank = $request->inputBank;
         }
-        $riwayat->user_id = $id;
+        $riwayat->dona_id = $id;
         $riwayat->save();
 
         $laporan = new Laporan;
 
-        $laporan->lap_id = $nocek;
-        $laporan->lap_tanggal = $request->inputTgl;
-        $laporan->lap_kegiatan = "Donasi Reguler";
-        $laporan->lap_penerima = $user->nama;
-        $laporan->lap_domisili = $user->domisili;
-        $laporan->lap_pemberi = $dona->dona_nama;
-        $laporan->lap_asal = $dona->dona_kota_kab;
-        $laporan->lap_jml = $request->inputDona;
-        $laporan->lap_jenis = $request->inputJenis;
+        $laporan->id = $nocek;
+        $laporan->tanggal = $request->inputTgl;
+        $laporan->kegiatan = "Donasi Reguler";
+        $laporan->penerima = $user->nama;
+        $laporan->domisili = $user->domisili;
+        $laporan->pemberi = $dona->nama;
+        $laporan->asal = $dona->kota_kab;
+        $laporan->jml = $request->inputDona;
+        $laporan->jenis = $request->inputJenis;
         if ($request->inputJenis == "Transfer"){
-            $laporan->lap_bank = $request->inputBank;
+            $laporan->bank = $request->inputBank;
         }
         $laporan->save();
 
@@ -141,8 +141,8 @@ class RiwayatController extends Controller
      */
     public function destroy($id)
     {
-        Riwayat::where('riwa_id', $id)->delete();
-        Laporan::where('lap_id', $id)->delete();
+        Riwayat::where('id', $id)->delete();
+        Laporan::where('id', $id)->delete();
 
         return redirect()->back()->with('success', 'Data berhasil dihapus');        
     }

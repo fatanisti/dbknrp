@@ -7,7 +7,7 @@
                         <img class="img-xs rounded-circle" src="{{ asset('images/pic-4.png') }}" alt="Profile image">
                     </div>
                     <div class="text-wrapper">
-                        <p class="profile-name">{{ Auth::user()->nama }}</p>
+                        <p class="profile-name">{{ Auth::user()->profile->nama }}</p>
                         <div>
                             <small class="designation">
                         @if ( Auth::user()->role == 1 )
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <h6><i class="fa fa-map-marker"></i> {{ Auth::user()->domisili }}</h6>
+                <h6><i class="fa fa-map-marker"></i> {{ Auth::user()->profile->domisili }}</h6>
             </div>
         </li>
         <li class="nav-item">

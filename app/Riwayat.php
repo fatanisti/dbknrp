@@ -6,20 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Riwayat extends Model
 {
-    protected $table = "riwayat_donasi";
+    protected $table = "dona_riwa";
 
     protected $fillable = [
-        'riwa_tanggal',
-        'riwa_penerima',
-        'riwa_domisili',
-        'riwa_pemberi',
-        'riwa_asal',
-        'riwa_jml',
-        'riwa_jenis',
-        'riwa_bank',
+        'tanggal',
+        'penerima',
+        'domisili',
+        'pemberi',
+        'asal',
+        'jml',
+        'jenis',
+        'bank',
     ];
 
-    protected $primaryKey = 'riwa_id';
-    public $timestamps = false;
+    protected $primaryKey = 'id';
     public $incrementing = false;
 }

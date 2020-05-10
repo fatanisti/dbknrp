@@ -123,7 +123,7 @@
                     </span>
                 </div>
                 @if (Auth::user()->role == 3)
-                <p class="form-control">{{ Auth::user()->domisili }}</p>
+                <p class="form-control">{{ Auth::user()->profile->domisili }}</p>
                 @else
                 <select class="form-control" id="daerah" name="keywordDaerah">
                     <option value="">--- Semua ---</option>
@@ -174,33 +174,33 @@
             <tbody>
             @foreach ($result as $res)
                 <tr class="table-light">
-                    <td>{{ $res->dona_nama }}</td>
-                    <td>{{ $res->dona_kota_kab }}</td>
-                    <td>{{ $res->dona_no_hp }}</td>
+                    <td>{{ $res->nama }}</td>
+                    <td>{{ $res->kota_kab }}</td>
+                    <td>{{ $res->no_hp }}</td>
                     <td>
                         <a href="#"
                             data-record-tgl="{{ Date::parse($res->created_at)->format('j F Y') }}"
-                            data-record-name="{{ $res->dona_nama }}"
-                            data-record-pob="{{ $res->dona_tempat_lahir }}"
-                            data-record-dob="{{ Date::parse($res->dona_tgl_lahir)->format('j F Y') }}"
-                            data-record-add="{{ $res->dona_alamat }}"
-                            data-record-rt="{{ $res->dona_rt }}"
-                            data-record-rw="{{ $res->dona_rw }}"
-                            data-record-kp="{{ $res->dona_kodepos }}"
-                            data-record-kel="{{ $res->dona_kelurahan }}"
-                            data-record-kec="{{ $res->dona_kecamatan }}"
-                            data-record-kot="{{ $res->dona_kota_kab }}"
-                            data-record-pvs="{{ $res->dona_provinsi }}"
-                            data-record-neg="{{ $res->dona_negara }}"
-                            data-record-tel="{{ $res->dona_no_telp }}"
-                            data-record-hp="{{ $res->dona_no_hp }}"
-                            data-record-ema="{{ $res->dona_email }}"
-                            data-record-fb="{{ $res->dona_akun_facebook }}"
-                            data-record-ig="{{ $res->dona_akun_instagram }}"
-                            data-record-pfs="{{ $res->dona_profesi }}"
+                            data-record-name="{{ $res->nama }}"
+                            data-record-pob="{{ $res->tempat_lahir }}"
+                            data-record-dob="{{ Date::parse($res->tgl_lahir)->format('j F Y') }}"
+                            data-record-add="{{ $res->alamat }}"
+                            data-record-rt="{{ $res->rt }}"
+                            data-record-rw="{{ $res->rw }}"
+                            data-record-kp="{{ $res->kodepos }}"
+                            data-record-kel="{{ $res->kelurahan }}"
+                            data-record-kec="{{ $res->kecamatan }}"
+                            data-record-kot="{{ $res->kota_kab }}"
+                            data-record-pvs="{{ $res->provinsi }}"
+                            data-record-neg="{{ $res->negara }}"
+                            data-record-tel="{{ $res->no_telp }}"
+                            data-record-hp="{{ $res->no_hp }}"
+                            data-record-ema="{{ $res->email }}"
+                            data-record-fb="{{ $res->akun_facebook }}"
+                            data-record-ig="{{ $res->_akun_instagram }}"
+                            data-record-pfs="{{ $res->_profesi }}"
                             data-toggle="modal" data-target="#check-profile" class="btn btn-inverse-info btn-rounded"><i class="fa fa-address-card-o"></i>Biodata</a>
-                        <a href="#" data-record-id="{{ $res->dona_id }}" data-record-name="{{ $res->dona_nama }}" data-record-add="{{ $res->dona_kota_kab }}" data-toggle="modal" data-target="#accept-requ" class="btn btn-inverse-success btn-rounded"><i class="fa fa-plus"></i>Terima</a>
-                        <a href="#" data-record-id="{{ $res->dona_id }}" data-record-name="{{ $res->dona_nama }}" data-record-add="{{ $res->dona_kota_kab }}" data-toggle="modal" data-target="#ignore-requ" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-times"></i>Tolak</a>
+                        <a href="#" data-record-id="{{ $res->_id }}" data-record-name="{{ $res->_nama }}" data-record-add="{{ $res->_kota_kab }}" data-toggle="modal" data-target="#accept-requ" class="btn btn-inverse-success btn-rounded"><i class="fa fa-plus"></i>Terima</a>
+                        <a href="#" data-record-id="{{ $res->_id }}" data-record-name="{{ $res->_nama }}" data-record-add="{{ $res->_kota_kab }}" data-toggle="modal" data-target="#ignore-requ" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-times"></i>Tolak</a>
                     </td>
                 </tr>
             @endforeach

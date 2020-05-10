@@ -25,7 +25,7 @@
             <div class="form-group col-md-4 col-12">
                 <label for="daerah">Daerah</label>
                 @if( Auth::user()->role == 3 )
-                <p class="form-control">{{ Auth::user()->domisili }}</p>
+                <p class="form-control">{{ Auth::user()->profile->domisili }}</p>
                 @else
                 <select class="form-control" id="daerah" name="keywordDaerah">
                     <option value="">--- Semua ---</option>
@@ -111,13 +111,13 @@
                     @if (Auth::user()->role == 4)
                         <td>{{ $result->count() }}</td>
                         <td>{{ $result->groupBy('fund_id')->count('fund_id') }}</td>
-                        <td>{{ $result->groupBy('user_id')->count('user_id') }}</td>
-                        <td>@money( $result->sum('riwa_jml') )</td>
+                        <td>{{ $result->groupBy('dona_id')->count('dona_id') }}</td>
+                        <td>@money( $result->sum('jml') )</td>
                     @else
                         <td>{{ $result->count() }}</td>
-                        <td>{{ $result->groupBy('lap_penerima')->count('lap_penerima') }}</td>
-                        <td>{{ $result->groupBy('lap_pemberi')->count('lap_pemberi') }}</td>
-                        <td>@money( $result->sum('lap_jml') )</td>
+                        <td>{{ $result->groupBy('penerima')->count('penerima') }}</td>
+                        <td>{{ $result->groupBy('pemberi')->count('pemberi') }}</td>
+                        <td>@money( $result->sum('jml') )</td>
                     @endif
                     </tr>
                 </tbody>
@@ -150,14 +150,14 @@
                     @if (Auth::user()->role == 4)
                         @foreach ($result2 as $res2)
                     <tr class="table-light">
-                        <td>{{ Date::parse($res2->riwa_tanggal)->format('j F Y') }}</td>
+                        <td>{{ Date::parse($res2->tanggal)->format('j F Y') }}</td>
                         <td>Donasi Reguler</td>
-                        <td>{{ $res2->riwa_penerima }}</td>
-                        <td>{{ $res2->riwa_domisili }}</td>
-                        <td>{{ $res2->dona_nama }}</td>
-                        <td>{{ $res2->dona_kota_kab }}</td>
-                        <td>@money( $res2->riwa_jml )</td>
-                        <td><a href="/hapus_donasi/{{ $res2->riwa_id }}" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
+                        <td>{{ $res2->penerima }}</td>
+                        <td>{{ $res2->domisili }}</td>
+                        <td>{{ $res2->nama }}</td>
+                        <td>{{ $res2->kota_kab }}</td>
+                        <td>@money( $res2->jml )</td>
+                        <td><a href="/hapus_donasi/{{ $res2->id }}" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
                     </tr>
                         @endforeach
                     @elseif (Auth::user()->role == 1)
@@ -171,14 +171,14 @@
                     @else
                         @foreach ($result2 as $res2)
                     <tr class="table-light">
-                        <td>{{ Date::parse($res2->lap_tanggal)->format('j F Y') }}</td>
-                        <td>{{ $res2->lap_kegiatan }}</td>
-                        <td>{{ $res2->lap_penerima }}</td>
-                        <td>{{ $res2->lap_domisili }}</td>
-                        <td>{{ $res2->lap_pemberi }}</td>
-                        <td>{{ $res2->lap_asal }}</td>
-                        <td>@money( $res2->lap_jml )</td>
-                        <td><a href="/hapus_donasi/{{ $res2->lap_id }}" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
+                        <td>{{ Date::parse($res2->tanggal)->format('j F Y') }}</td>
+                        <td>{{ $res2->kegiatan }}</td>
+                        <td>{{ $res2->penerima }}</td>
+                        <td>{{ $res2->domisili }}</td>
+                        <td>{{ $res2->pemberi }}</td>
+                        <td>{{ $res2->asal }}</td>
+                        <td>@money( $res2->jml )</td>
+                        <td><a href="/hapus_donasi/{{ $res2->id }}" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
                     </tr>
                         @endforeach
                     @endif

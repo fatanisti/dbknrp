@@ -37,33 +37,33 @@ class DonaturController extends Controller
 
         if ($user->role == 4){
             $donatur = Donatur::where('fund_id', $user->id)
-                ->orderBy('dona_nama')
+                ->orderBy('nama')
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('dona_kota_kab', $request->keywordDaerah);})
+                    $query->where('kota_kab', $request->keywordDaerah);})
                 ->when($request->keywordNama != null, function ($query) use ($request) {
-                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
+                    $query->where('nama', 'like', "%{$request->keywordNama}%");})
                 ->paginate(10);
         }
         elseif ($user->role == 3){
             $donatur = Donatur::where( function($q) use ($user) {
-                $q->where('dona_kota_kab', $user->domisili);
-            })  ->orderBy('dona_nama')
+                $q->where('kota_kab', $user->domisili);
+            })  ->orderBy('nama')
                 ->when($request->keywordNama != null, function ($query) use ($request) {
-                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
+                    $query->where('nama', 'like', "%{$request->keywordNama}%");})
                 ->paginate(10);
         }
         else {
-            $donatur = Donatur::orderBy('dona_nama')
+            $donatur = Donatur::orderBy('nama')
                 ->when($request->keywordNama != null, function ($query) use ($request) {
-                    $query->where('dona_nama', 'like', "%{$request->keywordNama}%");})
+                    $query->where('nama', 'like', "%{$request->keywordNama}%");})
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('dona_kota_kab', $request->keywordDaerah);})
+                    $query->where('kota_kab', $request->keywordDaerah);})
                 ->paginate(10);
         }
 
         $donatur->appends($request->only('keywordDaerah', 'limit'));
 
-        return view('show.maintable', compact('donatur', 'query', 'entry'));
+        return view('show.maintable', compact('donatur', 'entry'));
     }
 
     /**
@@ -127,40 +127,38 @@ class DonaturController extends Controller
     {
         // dd($request);
         
-        $idDon = $this->generateDonaId();
         $nocek = uniqid();
         $user = Auth::user();
         $donatur = new Donatur;
         
-        $donatur->dona_id = $idDon;
-        $donatur->dona_tgl_regis = $request->inputTglReg;
-        $donatur->dona_nama = $request->inputNama;
-        $donatur->dona_tempat_lahir = $request->inputBP;
-        $donatur->dona_tgl_lahir = $request->inputBOD;
-        $donatur->dona_alamat = $request->inputAddress;
-        $donatur->dona_rt = $request->inputRT;
-        $donatur->dona_rw = $request->inputRW;
-        $donatur->dona_kodepos = $request->inputKodepos;
-        $donatur->dona_kelurahan = $request->inputKel;
-        $donatur->dona_kecamatan = $request->inputKec;
-        $donatur->dona_kota_kab = $request->inputKab;
-        $donatur->dona_provinsi = $request->inputProv;
-        $donatur->dona_negara = $request->inputNegara;
-        $donatur->dona_no_telp = $request->inputTelp;
-        $donatur->dona_no_hp = $request->inputHP;
-        $donatur->dona_email = $request->inputEmail;
-        $donatur->dona_profesi = $request->inputProf;
-        $donatur->dona_akun_facebook = $request->inputFB;
-        $donatur->dona_akun_instagram = $request->inputIG;
-        $donatur->dona_catatan = $request->inputCatatan;
+        $donatur->tgl_regis = $request->inputTglReg;
+        $donatur->nama = $request->inputNama;
+        $donatur->tempat_lahir = $request->inputBP;
+        $donatur->tgl_lahir = $request->inputBOD;
+        $donatur->alamat = $request->inputAddress;
+        $donatur->rt = $request->inputRT;
+        $donatur->rw = $request->inputRW;
+        $donatur->kodepos = $request->inputKodepos;
+        $donatur->kelurahan = $request->inputKel;
+        $donatur->kecamatan = $request->inputKec;
+        $donatur->kota_kab = $request->inputKab;
+        $donatur->provinsi = $request->inputProv;
+        $donatur->negara = $request->inputNegara;
+        $donatur->no_telp = $request->inputTelp;
+        $donatur->no_hp = $request->inputHP;
+        $donatur->email = $request->inputEmail;
+        $donatur->profesi = $request->inputProf;
+        $donatur->akun_facebook = $request->inputFB;
+        $donatur->akun_instagram = $request->inputIG;
+        $donatur->catatan = $request->inputCatatan;
         $donatur->fund_id = $user->id;
         // dd($donatur);
         $donatur->save();
 
-        $id = Donatur::where('dona_id', $idDon)->first();
+        $id = Donatur::where('id', $donatur->id)->first();
 
         return redirect()->action(
-            'DonaturController@index', $id->dona_id
+            'DonaturController@index', $id->id
         );
     }
 
@@ -172,7 +170,7 @@ class DonaturController extends Controller
      */
     public function index($id)
     {
-        $donatur = Donatur::where('dona_id', $id)->first();
+        $donatur = Donatur::where('id', $id)->first();
 
         return view ('show.donadata', ['donatur'=>$donatur]);
     }
@@ -185,7 +183,7 @@ class DonaturController extends Controller
      */
     public function edit($id)
     {
-        $donatur = Donatur::where('dona_id', $id)->first();
+        $donatur = Donatur::where('id', $id)->first();
 
         $result = [
             'donatur' => $donatur,
@@ -203,32 +201,32 @@ class DonaturController extends Controller
      */
     public function update(Request $request)
     {
-        $donatur = Donatur::where('dona_id', $request->idDon)->first();
+        $donatur = Donatur::where('id', $request->id)->first();
 
-        $donatur->dona_nama = $request->inputNama;
-        $donatur->dona_tempat_lahir = $request->inputBP;
-        $donatur->dona_tgl_lahir = $request->inputBOD;
-        $donatur->dona_alamat = $request->inputAddress;
-        $donatur->dona_rt = $request->inputRT;
-        $donatur->dona_rw = $request->inputRW;
-        $donatur->dona_kodepos = $request->inputKodepos;
-        $donatur->dona_kelurahan = $request->inputKel;
-        $donatur->dona_kecamatan = $request->inputKec;
-        $donatur->dona_kota_kab = $request->inputKab;
-        $donatur->dona_provinsi = $request->inputProv;
-        $donatur->dona_negara = $request->inputNegara;
-        $donatur->dona_no_telp = $request->inputTelp;
-        $donatur->dona_no_hp = $request->inputHP;
-        $donatur->dona_email = $request->inputEmail;
-        $donatur->dona_profesi = $request->inputProf;
-        $donatur->dona_akun_facebook = $request->inputFB;
-        $donatur->dona_akun_instagram = $request->inputIG;
-        $donatur->dona_catatan = $request->inputCatatan;
+        $donatur->nama = $request->inputNama;
+        $donatur->tempat_lahir = $request->inputBP;
+        $donatur->tgl_lahir = $request->inputBOD;
+        $donatur->alamat = $request->inputAddress;
+        $donatur->rt = $request->inputRT;
+        $donatur->rw = $request->inputRW;
+        $donatur->kodepos = $request->inputKodepos;
+        $donatur->kelurahan = $request->inputKel;
+        $donatur->kecamatan = $request->inputKec;
+        $donatur->kota_kab = $request->inputKab;
+        $donatur->provinsi = $request->inputProv;
+        $donatur->negara = $request->inputNegara;
+        $donatur->no_telp = $request->inputTelp;
+        $donatur->no_hp = $request->inputHP;
+        $donatur->email = $request->inputEmail;
+        $donatur->profesi = $request->inputProf;
+        $donatur->akun_facebook = $request->inputFB;
+        $donatur->akun_instagram = $request->inputIG;
+        $donatur->catatan = $request->inputCatatan;
         
         $donatur->save();
 
         return redirect()->action(
-            'DonaturController@index', $donatur->dona_id
+            'DonaturController@index', $donatur->id
         );
     }
 
@@ -240,14 +238,14 @@ class DonaturController extends Controller
      */
     public function destroy($id)
     {
-        Donatur::where('dona_id', $id)->delete();
+        Donatur::where('id', $id)->delete();
 
         return redirect()->action(
             'DonaturController@all'
         )->with('success', 'Data berhasil dihapus');
     }
 
-     /**
+    /**
      * @return BinaryFileResponse
      */
     public function export()

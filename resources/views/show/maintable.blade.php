@@ -30,7 +30,7 @@
                     </span>
                 </div>
                 @if (Auth::user()->role == 3)
-                <p class="form-control">{{ Auth::user()->domisili }}</p>
+                <p class="form-control">{{ Auth::user()->profile->domisili }}</p>
                 @else
                 <select class="form-control" id="daerah" name="keywordDaerah">
                     <option value="">--- Semua ---</option>
@@ -91,12 +91,12 @@
             <tbody>
             @foreach ($donatur as $donat)
                 <tr class="table-light">
-                    <td>{{ $donat->dona_nama }}</td>
-                    <td>{{ $donat->dona_kota_kab }}</td>
-                    <td>{{ $donat->dona_no_hp }}</td>
+                    <td>{{ $donat->nama }}</td>
+                    <td>{{ $donat->kota_kab }}</td>
+                    <td>{{ $donat->no_hp }}</td>
                     <td>
-                        <a href="/data_donatur/{{ $donat->dona_id }}" class="btn btn-inverse-info btn-rounded"><i class="fa fa-address-card-o"></i>Profil</a>
-                        <a href="/riwayat_donasi/{{ $donat->dona_id }}" class="btn btn-inverse-success btn-rounded"><i class="fa fa-heart"></i>Riwayat</a>
+                        <a href="/data_donatur/{{ $donat->id }}" class="btn btn-inverse-info btn-rounded"><i class="fa fa-address-card-o"></i>Profil</a>
+                        <a href="/riwayat_donasi/{{ $donat->id }}" class="btn btn-inverse-success btn-rounded"><i class="fa fa-heart"></i>Riwayat</a>
                     </td>
                 </tr>
             @endforeach

@@ -29,41 +29,41 @@ class HomeController extends Controller
 
         if ($user->role == 3){
             $riwa = DB::table('laporan')
-                ->where('lap_domisili', $user->domisili)
+                ->where('domisili', $user->domisili)
                 ->get();
-            $dona = DB::table('donatur')
-                ->join('users', 'users.id', '=', 'donatur.fund_id')
+            $dona = DB::table('dona_profile')
+                ->join('users', 'users.id', '=', 'dona_profile.fund_id')
                 ->where('domisili', $user->domisili)
                 ->get();
             $fund = DB::table('users')->where('role', 4)
                 ->where('domisili', $user->domisili)
                 ->get();
-            $mon = DB::table('laporan')->where('lap_domisili', $user->domisili)->sum('lap_jml');
+            $mon = DB::table('laporan')->where('domisili', $user->domisili)->sum('jml');
 
             $monk = $this->custom_number_format($mon);
         }
         elseif ($user->role == 4){
             $riwa = DB::table('laporan')
-                ->where('lap_penerima', $user->nama)
+                ->where('penerima', $user->nama)
                 ->get();
-            $dona = DB::table('donatur')
+            $dona = DB::table('dona_profile')
                 ->where('fund_id', $user->id)
                 ->get();
             $fund = DB::table('users')->where('role', 4)
                 ->where('id', $user->id)
                 ->get();
-            $mon = DB::table('laporan')->where('lap_penerima', $user->nama)->sum('lap_jml');
+            $mon = DB::table('laporan')->where('penerima', $user->nama)->sum('jml');
 
             $monk = $this->custom_number_format($mon);
         }
         else {
             $riwa = DB::table('laporan')
                 ->get();
-            $dona = DB::table('donatur')
+            $dona = DB::table('dona_profile')
                 ->get();
             $fund = DB::table('users')->where('role', 4)
                 ->get();
-            $mon = DB::table('laporan')->sum('lap_jml');
+            $mon = DB::table('laporan')->sum('jml');
 
             $monk = $this->custom_number_format($mon);
         }

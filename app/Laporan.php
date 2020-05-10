@@ -9,18 +9,17 @@ class Laporan extends Model
     protected $table = "laporan";
 
     protected $fillable = [
-        'lap_tanggal',
-        'lap_kegiatan',
-        'lap_penerima',
-        'lap_domisili',
-        'lap_pemberi',
-        'lap_asal',
-        'lap_jml',
-        'lap_jenis',
-        'lap_bank',
+        'tanggal',
+        'kegiatan',
+        'penerima',
+        'domisili',
+        'pemberi',
+        'asal',
+        'jml',
+        'jenis',
+        'bank',
     ];
 
-    protected $primaryKey = 'lap_id';
-    public $timestamps = false;
+    protected $primaryKey = 'id';
     public $incrementing = false;
 }

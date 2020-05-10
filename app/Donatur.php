@@ -6,31 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Donatur extends Model
 {
-    protected $table = "donatur";
+    protected $table = "dona_profile";
 
     protected $fillable = [
-        'dona_tgl_regis',
-        'dona_nama',
-        'dona_tempat_lahir', 
-        'dona_tgl_lahir', 
-        'dona_alamat', 
-        'dona_rt',
-        'dona_rw',
-        'dona_kodepos',
-        'dona_kelurahan',
-        'dona_kecamatan',
-        'dona_kota_kab',
-        'dona_provinsi',
-        'dona_negara',
-        'dona_no_telp',
-        'dona_no_hp',
-        'dona_email',
-        'dona_akun_facebook',
-        'dona_akun_instagram',
-        'dona_profesi',
-        'dona_catatan',
+        'nama',
+        'tempat_lahir', 
+        'tgl_lahir', 
+        'alamat', 
+        'rt',
+        'rw',
+        'kodepos',
+        'kelurahan',
+        'kecamatan',
+        'kota_kab',
+        'provinsi',
+        'negara',
+        'no_telp',
+        'no_hp',
+        'email',
+        'akun_facebook',
+        'akun_instagram',
+        'profesi',
+        'catatan',
     ];
 
-    protected $primaryKey = 'dona_id';
-    public $incrementing = false;
+    protected $primaryKey = 'id';
 }

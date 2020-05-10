@@ -38,7 +38,7 @@
         </div>
     </div>
 </form>
-<form action="/simpan_riwayat/{{ $donatur->dona_id }}" method="POST">
+<form action="/simpan_riwayat/{{ $donatur->id }}" method="POST">
     @csrf
     <div class="modal fade" id="confirm-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -92,7 +92,7 @@
         <a href="{{ route('dona_data') }}"><i class="fa fa-arrow-circle-o-left"></i></a>
     </div>
     <div class="col-md-10 col-10">
-        <h4 class="text-primary text-center"><i class="fa fa-address-card-o"></i> @yield('pageTitle') | {{ $donatur->dona_nama }}</h4>
+        <h4 class="text-primary text-center"><i class="fa fa-address-card-o"></i> @yield('pageTitle') | {{ $donatur->nama }}</h4>
     </div>
 </div>
 <div class="card-body text-center">
@@ -105,7 +105,7 @@
                             <i class="fa fa-map-marker text-white"></i>
                         </span>
                     </div>
-                    <p class="form-control">{{ $donatur->dona_kota_kab }}</p>
+                    <p class="form-control">{{ $donatur->kota_kab }}</p>
                 </div>
             </div>
             <div class="form-group col-md-6">
@@ -115,7 +115,7 @@
                             <i class="fa fa-user-circle-o text-white"></i>
                         </span>
                     </div>
-                    <p class="form-control">{{ $donatur->dona_nama }}</p>
+                    <p class="form-control">{{ $donatur->nama }}</p>
                 </div>
             </div>
         </div>
@@ -185,7 +185,7 @@
     @endif
     @if ( Auth::user()->role == 4 )
     <br>
-    <a href="#" data-record-id="{{ $donatur->dona_id }}" data-toggle="modal" data-target="#confirm-add" class="btn btn-inverse-success btn-rounded"><i class="fa fa-plus"></i> Tambah Donasi</a>
+    <a href="#" data-record-id="{{ $donatur->id }}" data-toggle="modal" data-target="#confirm-add" class="btn btn-inverse-success btn-rounded"><i class="fa fa-plus"></i> Tambah Donasi</a>
     @endif
 </div>
 

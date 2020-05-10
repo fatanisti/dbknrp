@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Donatur;
 use App\Guest;
 use App\User;
+use App\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -41,41 +43,50 @@ class AdminController extends Controller
             'password' => $generatepass,
         ];
 
-        if ($creator->id == 3){
+        if ($creator->role == 3){
             $user = User::create([
                 'username' => $generateuser,
                 'password' => Hash::make($generatepass),
-                'nama' => $request->inputNama,
-                'domisili' => $creator->domisili,
-                'no_hp' => $request->inputHP,
                 'email' => $request->inputEmail,
                 'role' => $request->inputRole,
                 'remember_token' => str_random(10),
                 ]);
+            $userProfile = new UserProfile;
+            $userProfile->user_id = $user->id;
+            $userProfile->nama = $request->inputNama;
+            $userProfile->domisili = $creator->profile->domisili;
+            $userProfile->no_hp = $request->inputHP;
+            $userProfile->save();
         }
         else {
             if ($request->inputRole == 2){
                 $user = User::create([
                     'username' => $generateuser,
                     'password' => Hash::make($generatepass),
-                    'nama' => $request->inputNama,
-                    'no_hp' => $request->inputHP,
                     'email' => $request->inputEmail,
                     'role' => $request->inputRole,
                     'remember_token' => str_random(10),
                     ]);
+                $userProfile = new UserProfile;
+                $userProfile->user_id = $user->id;
+                $userProfile->nama = $request->inputNama;
+                $userProfile->no_hp = $request->inputHP;
+                $userProfile->save();
             }
             else {
                 $user = User::create([
                     'username' => $generateuser,
                     'password' => Hash::make($generatepass),
-                    'nama' => $request->inputNama,
-                    'domisili' => $request->inputDomi,
-                    'no_hp' => $request->inputHP,
                     'email' => $request->inputEmail,
                     'role' => $request->inputRole,
                     'remember_token' => str_random(10),
                     ]);
+                $userProfile = new UserProfile;
+                $userProfile->user_id = $user->id;
+                $userProfile->nama = $request->inputNama;
+                $userProfile->domisili = $request->inputDomi;
+                $userProfile->no_hp = $request->inputHP;
+                $userProfile->save();
             }
         }
         
@@ -157,19 +168,25 @@ class AdminController extends Controller
         $user = Auth::user();
 
         if ($user->role == 1){
-            $mamas = User::where('role', 2)
+            $mamas = DB::table('users')
+                ->join('users_profile', 'users.id', '=', 'users_profile.user_id')
+                ->where('role', 2)
                 ->orderBy('nama')
                 ->paginate(10);
         }
         elseif ($user->role == 2){
-            $mamas = User::where( function($q) {
+            $mamas = DB::table('users')
+                ->join('users_profile', 'users.id', '=', 'users_profile.user_id')
+                ->where( function($q) {
                 $q->where('role', 3)
                 ->orWhere('role', 4);
             })  ->orderBy('nama')
                 ->paginate(10);
         }
         else {
-            $mamas = User::where('role', 4)
+            $mamas = DB::table('users')
+                ->join('users_profile', 'users.id', '=', 'users_profile.user_id')
+                ->where('role', 4)
                 ->where('domisili', $user->domisili)
                 ->orderBy('nama')
                 ->paginate(10);
@@ -188,25 +205,25 @@ class AdminController extends Controller
     public function destroy($id)
     {
         $data = Donatur::select(
-            'dona_id',
-            'dona_nama',
-            'dona_tempat_lahir',
-            'dona_tgl_lahir',
-            'dona_alamat',
-            'dona_rt',
-            'dona_rw',
-            'dona_kodepos',
-            'dona_kelurahan',
-            'dona_kecamatan',
-            'dona_kota_kab',
-            'dona_provinsi',
-            'dona_negara',
-            'dona_no_telp',
-            'dona_no_hp',
-            'dona_email',
-            'dona_akun_facebook',
-            'dona_akun_instagram',
-            'dona_profesi')->where('fund_id', $id)->get()->toArray();
+            'id',
+            'nama',
+            'tempat_lahir',
+            'tgl_lahir',
+            'alamat',
+            'rt',
+            'rw',
+            'kodepos',
+            'kelurahan',
+            'kecamatan',
+            'kota_kab',
+            'provinsi',
+            'negara',
+            'no_telp',
+            'no_hp',
+            'email',
+            'akun_facebook',
+            'akun_instagram',
+            'profesi')->where('fund_id', $id)->get()->toArray();
         
         Guest::insert($data);
         User::where('id', $id)->delete();

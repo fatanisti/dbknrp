@@ -42,103 +42,103 @@ class LaporanController extends Controller
 
         if ($user->role == 1){
             $result = Laporan::when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('lap_domisili', $request->keywordDaerah)
+                    $query->where('domisili', $request->keywordDaerah)
                 ;})
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
-                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                    $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
                 ->when($request->keywordTahun != null, function ($query) use ($request) {
-                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                    $query->whereYear('tanggal', $request->keywordTahun)
                 ;})
                 ->get();
 
             $result2 = DB::table('laporan')
-                ->select(DB::raw('lap_domisili as area, YEAR(lap_tanggal) as year, MONTH(lap_tanggal) as month'), DB::raw('sum(lap_jml) as total'))
+                ->select(DB::raw('domisili as area, YEAR(tanggal) as year, MONTH(tanggal) as month'), DB::raw('sum(jml) as total'))
                 ->groupBy('area', 'year', 'month')
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('lap_domisili', $request->keywordDaerah)
+                    $query->where('domisili', $request->keywordDaerah)
                 ;})
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
-                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                    $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
                 ->when($request->keywordTahun != null, function ($query) use ($request) {
-                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                    $query->whereYear('tanggal', $request->keywordTahun)
                 ;})
-                ->orderBy('lap_tanggal', 'desc')
+                ->orderBy('tanggal', 'desc')
                 ->simplePaginate(10);
         }
         elseif ($user->role == 3){
-            $result = Laporan::where('lap_domisili', $user->domisili)
+            $result = Laporan::where('domisili', $user->domisili)
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
-                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                    $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
                 ->when($request->keywordTahun != null, function ($query) use ($request) {
-                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                    $query->whereYear('tanggal', $request->keywordTahun)
                 ;})
                 ->get();
 
-            $result2 = Laporan::where('lap_domisili', $user->domisili)
+            $result2 = Laporan::where('domisili', $user->domisili)
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
-                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                    $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
                 ->when($request->keywordTahun != null, function ($query) use ($request) {
-                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                    $query->whereYear('tanggal', $request->keywordTahun)
                 ;})
-                ->orderBy('lap_tanggal', 'desc')
+                ->orderBy('tanggal', 'desc')
                 ->simplePaginate(10);
         }
         elseif ($user->role == 4){
-            $result = DB::table('riwayat_donasi')
-                ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
-                ->where('donatur.fund_id', $user->id)
+            $result = DB::table('dona_riwa')
+                ->join('dona_profile', 'dona_profile.dona_id', '=', 'dona_riwa.user_id')
+                ->where('dona_profile.fund_id', $user->id)
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('dona_kota_kab', $request->keywordDaerah)
+                    $query->where('kota_kab', $request->keywordDaerah)
                 ;})
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
-                    $query->whereMonth('riwa_tanggal', $request->keywordBulan)
+                    $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
                 ->when($request->keywordTahun != null, function ($query) use ($request) {
-                    $query->whereYear('riwa_tanggal', $request->keywordTahun)
+                    $query->whereYear('tanggal', $request->keywordTahun)
                 ;})
                 ->get();
 
-            $result2 = DB::table('riwayat_donasi')
-                ->join('donatur', 'donatur.dona_id', '=', 'riwayat_donasi.user_id')
-                ->where('donatur.fund_id', $user->id)
+            $result2 = DB::table('dona_riwa')
+                ->join('dona_profile', 'dona_profile.dona_id', '=', 'dona_riwa.user_id')
+                ->where('dona_profile.fund_id', $user->id)
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('dona_kota_kab', $request->keywordDaerah)
+                    $query->where('kota_kab', $request->keywordDaerah)
                 ;})
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
-                    $query->whereMonth('riwa_tanggal', $request->keywordBulan)
+                    $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
                 ->when($request->keywordTahun != null, function ($query) use ($request) {
-                    $query->whereYear('riwa_tanggal', $request->keywordTahun)
+                    $query->whereYear('tanggal', $request->keywordTahun)
                 ;})
-                ->orderBy('riwa_tanggal', 'desc')
+                ->orderBy('tanggal', 'desc')
                 ->simplePaginate(10);       
         }
         else {
             $result = Laporan::when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('lap_domisili', $request->keywordDaerah)
+                    $query->where('domisili', $request->keywordDaerah)
                 ;})
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
-                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                    $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
                 ->when($request->keywordTahun != null, function ($query) use ($request) {
-                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                    $query->whereYear('tanggal', $request->keywordTahun)
                 ;})
                 ->get();
 
             $result2 = Laporan::when($request->keywordDaerah != null, function ($query) use ($request) {
-                    $query->where('lap_domisili', $request->keywordDaerah)
+                    $query->where('domisili', $request->keywordDaerah)
                 ;})
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
-                    $query->whereMonth('lap_tanggal', $request->keywordBulan)
+                    $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
                 ->when($request->keywordTahun != null, function ($query) use ($request) {
-                    $query->whereYear('lap_tanggal', $request->keywordTahun)
+                    $query->whereYear('tanggal', $request->keywordTahun)
                 ;})
-                ->orderBy('lap_tanggal', 'desc')
+                ->orderBy('tanggal', 'desc')
                 ->simplePaginate(10);
         }
 
@@ -187,22 +187,22 @@ class LaporanController extends Controller
         $laporan = new Laporan;
         $nocek = uniqid();
 
-        $laporan->lap_id = $nocek;
-        $laporan->lap_tanggal = $request->inputTgl;
-        $laporan->lap_kegiatan = $request->inputKeg;
-        $laporan->lap_penerima = $user->nama;
+        $laporan->id = $nocek;
+        $laporan->tanggal = $request->inputTgl;
+        $laporan->kegiatan = $request->inputKeg;
+        $laporan->penerima = $user->nama;
         if ($user->id == 2){
-            $laporan->lap_domisili = $request->inputKab;
+            $laporan->domisili = $request->inputKab;
         }
         else {
-            $laporan->lap_domisili = $user->domisili;
+            $laporan->domisili = $user->domisili;
         }
-        $laporan->lap_pemberi = $request->inputNama;
-        $laporan->lap_asal = $request->inputKab;
-        $laporan->lap_jml = $request->inputDona;
-        $laporan->lap_jenis = $request->inputJenis;
+        $laporan->pemberi = $request->inputNama;
+        $laporan->asal = $request->inputKab;
+        $laporan->jml = $request->inputDona;
+        $laporan->jenis = $request->inputJenis;
         if ($request->inputJenis == "Transfer"){
-            $laporan->lap_bank = $request->inputBank;
+            $laporan->bank = $request->inputBank;
         }
         $laporan->save();
 
@@ -253,17 +253,17 @@ class LaporanController extends Controller
      */
     public function destroy($id)
     {
-        if (Laporan::where('lap_id', $id)->first()){
+        if (Laporan::where('id', $id)->first()){
             // It exists
-            Laporan::where('lap_id', $id)->delete();
+            Laporan::where('id', $id)->delete();
         }
         else{
             // It does not exist
         }
 
-        if (Riwayat::where('riwa_id', $id)->first()){
+        if (Riwayat::where('id', $id)->first()){
             // It exists
-            Riwayat::where('riwa_id', $id)->delete();
+            Riwayat::where('id', $id)->delete();
         }
         else{
             // It does not exist
