@@ -5,7 +5,6 @@ use Faker\Generator as Faker;
 $factory->define(App\Donatur::class, function (Faker $faker) {
     return [
         'dona_id' => generateDonaId(),
-        'dona_tgl_regis' => now(),
         'dona_nama' => $faker->name,
         'dona_tempat_lahir' => $faker->city,
         'dona_tgl_lahir' => $faker->dateTimeThisCentury($max = 'now', $timezone = null),

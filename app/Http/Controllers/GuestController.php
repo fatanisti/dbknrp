@@ -97,7 +97,6 @@ class GuestController extends Controller
         else{
             $donatur = new Donatur;
             $donatur->id = $caldon->id;
-            $donatur->tgl_regis = now();
             $donatur->nama = $caldon->nama;
             $donatur->tempat_lahir = $caldon->tempat_lahir;
             $donatur->tgl_lahir = $caldon->tgl_lahir;

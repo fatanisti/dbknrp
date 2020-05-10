@@ -89,7 +89,7 @@ class LaporanController extends Controller
         }
         elseif ($user->role == 4){
             $result = DB::table('dona_riwa')
-                ->join('dona_profile', 'dona_profile.dona_id', '=', 'dona_riwa.user_id')
+                ->join('dona_profile', 'dona_profile.id', '=', 'dona_riwa.dona_id')
                 ->where('dona_profile.fund_id', $user->id)
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
                     $query->where('kota_kab', $request->keywordDaerah)
@@ -103,7 +103,7 @@ class LaporanController extends Controller
                 ->get();
 
             $result2 = DB::table('dona_riwa')
-                ->join('dona_profile', 'dona_profile.dona_id', '=', 'dona_riwa.user_id')
+                ->join('dona_profile', 'dona_profile.id', '=', 'dona_riwa.dona_id')
                 ->where('dona_profile.fund_id', $user->id)
                 ->when($request->keywordDaerah != null, function ($query) use ($request) {
                     $query->where('kota_kab', $request->keywordDaerah)

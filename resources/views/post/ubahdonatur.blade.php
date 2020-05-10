@@ -14,7 +14,7 @@
             </div>
             <div class="form-group col-md-2">
                 <label for="inputTglReg"><i class="fa fa-calendar"></i> Tanggal Registrasi</label>
-                <input type="date" class="form-control" id="inputTglReg" name="inputTglReg" value="{{ $donatur->tgl_regis }}" readonly>
+                <input type="date" class="form-control" id="inputTglReg" name="inputTglReg" value="{{ $donatur->created_at }}" readonly>
             </div>
             <div class="form-group col-md-7">
                 <label for="inputNama"><i class="fa fa-user-circle-o"></i> Nama Lengkap</label>

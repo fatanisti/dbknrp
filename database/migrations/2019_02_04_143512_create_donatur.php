@@ -15,7 +15,6 @@ class CreateDonatur extends Migration
     {
         Schema::create('donatur', function (Blueprint $table) {
             $table->bigInteger('dona_id')->unique();
-            $table->date('dona_tgl_regis');
             $table->string('dona_nama');
             $table->string('dona_tempat_lahir')->nullable();
             $table->date('dona_tgl_lahir')->nullable();

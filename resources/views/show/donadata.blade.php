@@ -57,7 +57,7 @@
         </div><br>
         <div class="row">
             <div class="col-md-4"><h5>Tanggal Registrasi</h5></div>
-            <div class="col-md-8"><i class="fa fa-calendar"></i> {{ Date::parse($donatur->tgl_regis)->format('j F Y') }}</div>
+            <div class="col-md-8"><i class="fa fa-calendar"></i> {{ Date::parse($donatur->created_at)->format('j F Y') }}</div>
         </div><br>
         <div class="row">
             <div class="col-md-4"><h5>Nama Lengkap</h5></div>

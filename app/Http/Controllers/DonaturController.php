@@ -131,7 +131,6 @@ class DonaturController extends Controller
         $user = Auth::user();
         $donatur = new Donatur;
         
-        $donatur->tgl_regis = $request->inputTglReg;
         $donatur->nama = $request->inputNama;
         $donatur->tempat_lahir = $request->inputBP;
         $donatur->tgl_lahir = $request->inputBOD;
