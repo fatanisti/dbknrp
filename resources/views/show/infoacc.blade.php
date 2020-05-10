@@ -53,13 +53,13 @@
         <a href="{{ route('manage_acc') }}"><i class="fa fa-arrow-circle-o-left"></i></a>
     </div>
     <div class="col-md-10 col-10">
-        <h4 class="text-primary text-center"><i class="fa fa-address-card-o"></i> @yield('pageTitle') | {{ $admin->nama }}</h4>
+        <h4 class="text-primary text-center"><i class="fa fa-address-card-o"></i> @yield('pageTitle') | {{ $admin->profile->nama }}</h4>
     </div>
 </div>
 <div class="card-body text-center">
     <div class="row">
         <div class="col-md-4"><h5>Nama Admin</h5></div>
-        <div class="col-md-8">{{ $admin->nama }}</div>
+        <div class="col-md-8">{{ $admin->profile->nama }}</div>
     </div><br>
     <div class="row">
         <div class="col-md-4"><h5>Username</h5></div>
@@ -67,11 +67,11 @@
     </div><br>
     <div class="row">
         <div class="col-md-4"><h5>Domisili</h5></div>
-        <div class="col-md-8">{{ $admin->domisili }}</div>
+        <div class="col-md-8">{{ $admin->profile->domisili }}</div>
     </div><br>
     <div class="row">
         <div class="col-md-4"><h5>No. HP</h5></div>
-        <div class="col-md-8">{{ $admin->no_hp }}</div>
+        <div class="col-md-8">{{ $admin->profile->no_hp }}</div>
     </div><br>
     <div class="row">
         <div class="col-md-4"><h5>Email</h5></div>
@@ -95,10 +95,10 @@
     </div><br>
     <div class="row justify-content-center">
         <div class="col-md-6 col-6">
-            <a href="/reset_akun/{{ $admin->id }}" data-record-id="{{ $admin->id }}" data-record-title="{{ $admin->nama }}" data-toggle="modal" data-target="#confirm-reset" class="btn btn-rounded btn-inverse-warning">
+            <a href="/reset_akun/{{ $admin->id }}" data-record-id="{{ $admin->id }}" data-record-title="{{ $admin->profile->nama }}" data-toggle="modal" data-target="#confirm-reset" class="btn btn-rounded btn-inverse-warning">
                 <i class="fa fa-key"></i> Reset Password
             </a>
-            <a href="/hapus_akun/{{ $admin->id }}" data-record-id="{{ $admin->id }}" data-record-title="{{ $admin->nama }}" data-toggle="modal" data-target="#confirm-delete" class="btn btn-rounded btn-inverse-danger">
+            <a href="/hapus_akun/{{ $admin->id }}" data-record-id="{{ $admin->id }}" data-record-title="{{ $admin->profile->nama }}" data-toggle="modal" data-target="#confirm-delete" class="btn btn-rounded btn-inverse-danger">
                 <i class="fa fa-trash-o"></i> Hapus Admin
             </a>
         </div>

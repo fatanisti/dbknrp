@@ -18,8 +18,8 @@
                 <div class="form-group row">
                     <label for="inputDomi" class="col-md-4 col-form-label text-md-right">{{ __('Domisili') }}</label>
                     <div class="col-md-6">
-                        @if(Auth::user()->id == 3)
-                        <p class="form-control" id="inputDomi" name="inputDomi">{{ Auth::user()->->profile->domisili }}</p>
+                        @if(Auth::user()->role == 3)
+                        <p class="form-control" id="inputDomi" name="inputDomi">{{ Auth::user()->profile->domisili }}</p>
                         @else
                         <select class="form-control" id="inputDomi" name="inputDomi">
                             <option value="Kab. Bandung" {{ old('inputDomi', $entry['inputDomi'] )== 'Kab. Bandung' ? 'selected' : ''  }}>Kab. Bandung</option>

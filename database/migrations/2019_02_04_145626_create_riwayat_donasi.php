@@ -14,16 +14,16 @@ class CreateRiwayatDonasi extends Migration
     public function up()
     {
         Schema::create('riwayat_donasi', function (Blueprint $table) {
-            $table->string('riwa_id')->unique();
-            $table->date('riwa_tanggal');
-            $table->string('riwa_penerima');
-            $table->string('riwa_domisili');
-            $table->string('riwa_pemberi');
-            $table->string('riwa_asal');
-            $table->unsignedBigInteger('riwa_jml');
-            $table->string('riwa_jenis');
-            $table->string('riwa_bank')->nullable();
-            $table->bigInteger('user_id');
+            $table->string('id')->unique();
+            $table->date('tanggal');
+            $table->string('penerima');
+            $table->string('domisili');
+            $table->string('pemberi');
+            $table->string('asal');
+            $table->unsignedBigInteger('jml');
+            $table->string('jenis');
+            $table->string('bank')->nullable();
+            $table->bigInteger('id');
         });
     }
 

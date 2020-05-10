@@ -167,12 +167,12 @@
             <tbody>                
             @foreach ($riwayat as $riwa)
                 <tr class="table-light">
-                    <td>{{ Date::parse($riwa->riwa_tanggal)->format('j F Y') }}</td>
-                    <td>@money( $riwa->riwa_jml )</td>
-                    <td>{{ $riwa->riwa_jenis }}</td>
-                    <td>{{ $riwa->riwa_bank }}</td>
-                    <td>{{ $riwa->riwa_penerima }}</td>
-                    <td><a href="#" data-record-id="{{ $riwa->riwa_id }}" data-toggle="modal" data-target="#confirm-delete" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
+                    <td>{{ Date::parse($riwa->tanggal)->format('j F Y') }}</td>
+                    <td>@money( $riwa->jml )</td>
+                    <td>{{ $riwa->jenis }}</td>
+                    <td>{{ $riwa->bank }}</td>
+                    <td>{{ $riwa->penerima }}</td>
+                    <td><a href="#" data-record-id="{{ $riwa->id }}" data-toggle="modal" data-target="#confirm-delete" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
                 </tr>
             @endforeach
             </tbody>
