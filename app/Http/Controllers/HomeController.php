@@ -29,16 +29,18 @@ class HomeController extends Controller
 
         if ($user->role == 3){
             $riwa = DB::table('laporan')
-                ->where('domisili', $user->domisili)
+                ->where('domisili', $user->profile->domisili)
                 ->get();
             $dona = DB::table('dona_profile')
                 ->join('users', 'users.id', '=', 'dona_profile.fund_id')
-                ->where('domisili', $user->domisili)
+                ->join('users_profile', 'users.id', '=', 'users_profile.user_id')
+                ->where('domisili', $user->profile->domisili)
                 ->get();
             $fund = DB::table('users')->where('role', 4)
-                ->where('domisili', $user->domisili)
+                ->join('users_profile', 'users.id', '=', 'users_profile.user_id')
+                ->where('domisili', $user->profile->domisili)
                 ->get();
-            $mon = DB::table('laporan')->where('domisili', $user->domisili)->sum('jml');
+            $mon = DB::table('laporan')->where('domisili', $user->profile->domisili)->sum('jml');
 
             $monk = $this->custom_number_format($mon);
         }

@@ -178,9 +178,10 @@ class AdminController extends Controller
             $mamas = DB::table('users')
                 ->join('users_profile', 'users.id', '=', 'users_profile.user_id')
                 ->where( function($q) {
-                $q->where('role', 3)
-                ->orWhere('role', 4);
-            })  ->orderBy('nama')
+                    $q->where('role', 3)
+                    ->orWhere('role', 4);
+                }) 
+                ->orderBy('nama')
                 ->paginate(10);
         }
         else {
