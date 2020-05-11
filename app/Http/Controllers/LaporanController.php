@@ -68,7 +68,7 @@ class LaporanController extends Controller
                 ->simplePaginate(10);
         }
         elseif ($user->role == 3){
-            $result = Laporan::where('domisili', $user->domisili)
+            $result = Laporan::where('domisili', $user->profile->domisili)
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
                     $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
@@ -77,7 +77,7 @@ class LaporanController extends Controller
                 ;})
                 ->get();
 
-            $result2 = Laporan::where('domisili', $user->domisili)
+            $result2 = Laporan::where('domisili', $user->profile->domisili)
                 ->when($request->keywordBulan != null, function ($query) use ($request) {
                     $query->whereMonth('tanggal', $request->keywordBulan)
                 ;})
@@ -190,12 +190,12 @@ class LaporanController extends Controller
         $laporan->id = $nocek;
         $laporan->tanggal = $request->inputTgl;
         $laporan->kegiatan = $request->inputKeg;
-        $laporan->penerima = $user->nama;
-        if ($user->id == 2){
+        $laporan->penerima = $user->profile->nama;
+        if ($user->role == 2){
             $laporan->domisili = $request->inputKab;
         }
         else {
-            $laporan->domisili = $user->domisili;
+            $laporan->domisili = $user->profile->domisili;
         }
         $laporan->pemberi = $request->inputNama;
         $laporan->asal = $request->inputKab;

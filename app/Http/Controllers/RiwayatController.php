@@ -77,8 +77,8 @@ class RiwayatController extends Controller
 
         $riwayat->id = $nocek;
         $riwayat->tanggal = $request->inputTgl;
-        $riwayat->penerima = $user->nama;
-        $riwayat->domisili = $user->domisili;
+        $riwayat->penerima = $user->profile->nama;
+        $riwayat->domisili = $user->profile->domisili;
         $riwayat->pemberi = $dona->nama;
         $riwayat->asal = $dona->kota_kab;
         $riwayat->jml = $request->inputDona;
@@ -94,8 +94,8 @@ class RiwayatController extends Controller
         $laporan->id = $nocek;
         $laporan->tanggal = $request->inputTgl;
         $laporan->kegiatan = "Donasi Reguler";
-        $laporan->penerima = $user->nama;
-        $laporan->domisili = $user->domisili;
+        $laporan->penerima = $user->profile->nama;
+        $laporan->domisili = $user->profile->domisili;
         $laporan->pemberi = $dona->nama;
         $laporan->asal = $dona->kota_kab;
         $laporan->jml = $request->inputDona;

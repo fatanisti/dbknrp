@@ -188,7 +188,7 @@ class AdminController extends Controller
             $mamas = DB::table('users')
                 ->join('users_profile', 'users.id', '=', 'users_profile.user_id')
                 ->where('role', 4)
-                ->where('domisili', $user->domisili)
+                ->where('domisili', $user->profile->domisili)
                 ->orderBy('nama')
                 ->paginate(10);
         }

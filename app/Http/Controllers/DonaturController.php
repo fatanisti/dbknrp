@@ -46,7 +46,7 @@ class DonaturController extends Controller
         }
         elseif ($user->role == 3){
             $donatur = Donatur::where( function($q) use ($user) {
-                $q->where('kota_kab', $user->domisili);
+                $q->where('kota_kab', $user->profile->domisili);
             })  ->orderBy('nama')
                 ->when($request->keywordNama != null, function ($query) use ($request) {
                     $query->where('nama', 'like', "%{$request->keywordNama}%");})
@@ -252,7 +252,7 @@ class DonaturController extends Controller
         $user = Auth::user();
 
         $id = $user->id;
-        $daerah = $user->domisili;
+        $daerah = $user->profile->domisili;
 
         return new DonaturExport($id, $daerah);
     }

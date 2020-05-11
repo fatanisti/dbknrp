@@ -46,7 +46,7 @@ class HomeController extends Controller
         }
         elseif ($user->role == 4){
             $riwa = DB::table('laporan')
-                ->where('penerima', $user->nama)
+                ->where('penerima', $user->profile->nama)
                 ->get();
             $dona = DB::table('dona_profile')
                 ->where('fund_id', $user->id)
@@ -54,7 +54,7 @@ class HomeController extends Controller
             $fund = DB::table('users')->where('role', 4)
                 ->where('id', $user->id)
                 ->get();
-            $mon = DB::table('laporan')->where('penerima', $user->nama)->sum('jml');
+            $mon = DB::table('laporan')->where('penerima', $user->profile->nama)->sum('jml');
 
             $monk = $this->custom_number_format($mon);
         }
