@@ -32,7 +32,7 @@ class DonaturExport implements FromQuery, WithHeadings, Responsable, ShouldAutoS
         }
         elseif ($user->role == 3){
             return Donatur::query()
-            ->where('dona_kota_kab', $this->daerah);
+            ->where('kota_kab', $this->daerah);
         }
         else {
             return Donatur::query();
@@ -46,7 +46,6 @@ class DonaturExport implements FromQuery, WithHeadings, Responsable, ShouldAutoS
     {
         return [
             'ID Donatur',
-            'Tgl Regis',
             'Nama',
             'Tempat Lahir',
             'Tgl Lahir',

@@ -22,11 +22,11 @@ class LaporanExport implements FromQuery, WithHeadings, Responsable, ShouldAutoS
 
         if ($user->role == 4){
             return Laporan::query()
-            ->where('lap_penerima', $user->nama);
+            ->where('penerima', $user->profile->nama);
         }
         elseif ($user->role == 3){
             return Laporan::query()
-            ->where('lap_domisili', $user->domisili);
+            ->where('domisili', $user->profile->domisili);
         }
         else {
             return Laporan::query();

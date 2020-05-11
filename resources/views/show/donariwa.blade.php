@@ -161,7 +161,9 @@
                     <th><i class="fa fa-handshake-o"></i> Cash/Transfer</th>
                     <th><i class="fa fa-bank"></i> Bank</th>
                     <th><i class="fa fa-user-circle-o"></i> Petugas</th>
+                    @if ( Auth::user()->role != 1 )
                     <th><i class="fa fa-wrench"></i> Action</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>                
@@ -172,7 +174,9 @@
                     <td>{{ $riwa->jenis }}</td>
                     <td>{{ $riwa->bank }}</td>
                     <td>{{ $riwa->penerima }}</td>
+                    @if ( Auth::user()->role != 1 )
                     <td><a href="#" data-record-id="{{ $riwa->id }}" data-toggle="modal" data-target="#confirm-delete" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-trash-o"></i>Hapus</a></td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>

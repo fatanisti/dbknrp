@@ -15,6 +15,7 @@
                         <input id="inputNama" type="text" class="form-control" name="inputNama" value="{{ old('inputNama') }}" required autofocus>
                     </div>
                 </div>
+                @if(Auth::user()->role != 1)
                 <div class="form-group row">
                     <label for="inputDomi" class="col-md-4 col-form-label text-md-right">{{ __('Domisili') }}</label>
                     <div class="col-md-6">
@@ -53,6 +54,7 @@
                         @endif
                     </div>
                 </div>
+                @endif
                 <div class="form-group row">
                     <label for="inputHP" class="col-md-4 col-form-label text-md-right">{{ __('No. HP') }}</label>
                     <div class="col-md-6">

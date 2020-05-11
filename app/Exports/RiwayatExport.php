@@ -27,11 +27,11 @@ class RiwayatExport implements FromQuery, WithHeadings, Responsable, ShouldAutoS
 
         if ($user->role == 4){
             return Laporan::query()
-            ->where('lap_penerima', $this->nama);
+            ->where('penerima', $this->nama);
         }
         elseif ($user->role == 3){
             return Laporan::query()
-            ->where('lap_domisili', $this->daerah);
+            ->where('domisili', $this->daerah);
         }
         else {
             return Laporan::query();

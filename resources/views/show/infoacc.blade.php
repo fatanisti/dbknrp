@@ -65,14 +65,18 @@
         <div class="col-md-4"><h5>Username</h5></div>
         <div class="col-md-8">{{ $admin->username }}</div>
     </div><br>
+    @if($admin->profile->domisili != null)
     <div class="row">
         <div class="col-md-4"><h5>Domisili</h5></div>
         <div class="col-md-8">{{ $admin->profile->domisili }}</div>
     </div><br>
+    @endif
+    @if($admin->profile->no_hp != null)
     <div class="row">
         <div class="col-md-4"><h5>No. HP</h5></div>
         <div class="col-md-8">{{ $admin->profile->no_hp }}</div>
     </div><br>
+    @endif
     <div class="row">
         <div class="col-md-4"><h5>Email</h5></div>
         <div class="col-md-8">{{ $admin->email }}</div>
