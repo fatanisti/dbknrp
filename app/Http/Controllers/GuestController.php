@@ -46,6 +46,7 @@ class GuestController extends Controller
         // dd($request);
         $donatur = new Guest;
 
+        $donatur->id = $this->generateDonaId();
         $donatur->nama = $request->inputNama;
         $donatur->tempat_lahir = $request->inputBP;
         $donatur->tgl_lahir = $request->inputBOD;
@@ -64,6 +65,7 @@ class GuestController extends Controller
         $donatur->profesi = $request->inputProf;
         $donatur->akun_facebook = $request->inputFB;
         $donatur->akun_instagram = $request->inputIG;
+        $donatur->is_new = 1;
         // dd($donatur);
         $donatur->save();
 
@@ -89,14 +91,13 @@ class GuestController extends Controller
         $caldon = Guest::where('id', $id)->first();
         $user = Auth::user();
 
-        if (Donatur::where('id', '=', $caldon->id)->exists()){
+        if ($caldon->is_new == 0){
             $donatur = Donatur::where('id', $id)->first();
             $donatur->fund_id = $user->id;
             $donatur->save();
         }
         else{
             $donatur = new Donatur;
-            $donatur->id = $caldon->id;
             $donatur->nama = $caldon->nama;
             $donatur->tempat_lahir = $caldon->tempat_lahir;
             $donatur->tgl_lahir = $caldon->tgl_lahir;
@@ -139,5 +140,23 @@ class GuestController extends Controller
         Guest::where('id', $id)->delete();
 
         return redirect()->back()->with('success', 'Data berhasil dihapus');
+    }
+
+    function generateDonaId() {
+        $number = mt_rand(1000000000, 9999999999); // better than rand()
+    
+        // call the same function if the barcode exists already
+        if ($this->idExists($number)) {
+            return generateDonaId();
+        }
+    
+        // otherwise, it's valid and can be used
+        return $number;
+    }
+    
+    function idExists($number) {
+        // query the database and return a boolean
+        // for instance, it might look like this in Laravel
+        return Guest::whereId($number)->exists();
     }
 }

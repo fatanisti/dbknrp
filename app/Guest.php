@@ -26,7 +26,9 @@ class Guest extends Model
         'akun_facebook',
         'akun_instagram',
         'profesi',
+        'isNew',
     ];
 
     protected $primaryKey = 'id';
+    public $incrementing = false;
 }

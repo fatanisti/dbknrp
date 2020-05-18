@@ -224,8 +224,9 @@ class AdminController extends Controller
             'email',
             'akun_facebook',
             'akun_instagram',
-            'profesi')->where('fund_id', $id)->get()->toArray();
-        
+            'profesi',
+            'created_at',
+            'updated_at')->where('fund_id', $id)->get()->toArray();
         Guest::insert($data);
         User::where('id', $id)->delete();
         Donatur::where('fund_id', $id)->update(array('fund_id' => null));

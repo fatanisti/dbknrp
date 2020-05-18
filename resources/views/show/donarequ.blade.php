@@ -196,11 +196,11 @@
                             data-record-hp="{{ $res->no_hp }}"
                             data-record-ema="{{ $res->email }}"
                             data-record-fb="{{ $res->akun_facebook }}"
-                            data-record-ig="{{ $res->_akun_instagram }}"
-                            data-record-pfs="{{ $res->_profesi }}"
+                            data-record-ig="{{ $res->akun_instagram }}"
+                            data-record-pfs="{{ $res->profesi }}"
                             data-toggle="modal" data-target="#check-profile" class="btn btn-inverse-info btn-rounded"><i class="fa fa-address-card-o"></i>Biodata</a>
-                        <a href="#" data-record-id="{{ $res->_id }}" data-record-name="{{ $res->_nama }}" data-record-add="{{ $res->_kota_kab }}" data-toggle="modal" data-target="#accept-requ" class="btn btn-inverse-success btn-rounded"><i class="fa fa-plus"></i>Terima</a>
-                        <a href="#" data-record-id="{{ $res->_id }}" data-record-name="{{ $res->_nama }}" data-record-add="{{ $res->_kota_kab }}" data-toggle="modal" data-target="#ignore-requ" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-times"></i>Tolak</a>
+                        <a href="#" data-record-id="{{ $res->id }}" data-record-name="{{ $res->nama }}" data-record-add="{{ $res->kota_kab }}" data-toggle="modal" data-target="#accept-requ" class="btn btn-inverse-success btn-rounded"><i class="fa fa-plus"></i>Terima</a>
+                        <a href="#" data-record-id="{{ $res->id }}" data-record-name="{{ $res->nama }}" data-record-add="{{ $res->kota_kab }}" data-toggle="modal" data-target="#ignore-requ" class="btn btn-inverse-danger btn-rounded"><i class="fa fa-times"></i>Tolak</a>
                     </td>
                 </tr>
             @endforeach
